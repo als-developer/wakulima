@@ -6,22 +6,20 @@ class PostManager {
     }
     
     init() {
-        // Create post
-        document.getElementById('postBtn')?.addEventListener('click', () => {
+        document.getElementById('postBtn').addEventListener('click', () => {
             this.createPost();
         });
         
-        document.getElementById('postInput')?.addEventListener('keypress', (e) => {
+        document.getElementById('postInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.createPost();
         });
         
-        // Submit post from modal
-        document.getElementById('submitPostBtn')?.addEventListener('click', () => {
-            const text = document.getElementById('postTextarea').value;
+        document.getElementById('submitPostBtn').addEventListener('click', () => {
+            const text = document.getElementById('postTextarea').value.trim();
             if (text) {
                 this.createPost(text);
-                document.getElementById('postModal').classList.remove('show');
                 document.getElementById('postTextarea').value = '';
+                document.getElementById('postModal').classList.remove('show');
             }
         });
     }
@@ -45,26 +43,24 @@ class PostManager {
                 time: new Date(Date.now() - 3600000).toISOString(),
                 likes: 24,
                 comments: 5,
-                liked: false,
-                type: 'text'
+                liked: false
             },
             {
                 id: '2',
                 author: 'FarmTech',
                 authorAvatar: '/images/default-avatar.png',
-                content: 'Teknolojia mpya ya kumwagilia inapunguza matumizi ya maji kwa 40%. Tafadhali tembelea mtandao wetu kwa maelezo zaidi.',
+                content: 'Teknolojia mpya ya kumwagilia inapunguza matumizi ya maji kwa 40%.',
                 time: new Date(Date.now() - 7200000).toISOString(),
                 likes: 42,
                 comments: 12,
-                liked: false,
-                type: 'text'
+                liked: false
             }
         ];
     }
     
     createPost(content) {
         if (!auth.currentUser) {
-            showNotification('Tafadhali ingia kwanza!', 'warning');
+            showToast('Tafadhali ingia kwanza!', 'warning');
             document.getElementById('loginModal').classList.add('show');
             return;
         }
@@ -73,7 +69,7 @@ class PostManager {
         const text = content || input.value.trim();
         
         if (!text) {
-            showNotification('Andika kitu!', 'warning');
+            showToast('Andika kitu!', 'warning');
             return;
         }
         
@@ -85,8 +81,7 @@ class PostManager {
             time: new Date().toISOString(),
             likes: 0,
             comments: 0,
-            liked: false,
-            type: 'text'
+            liked: false
         };
         
         this.posts.unshift(post);
@@ -94,22 +89,13 @@ class PostManager {
         this.renderPosts();
         input.value = '';
         
-        // Update user post count
         auth.currentUser.posts++;
         localStorage.setItem('kilimo_user', JSON.stringify(auth.currentUser));
         
-        showNotification('Chapisho limechapishwa!', 'success');
-        
-        // Track post creation
-        if (window.analytics) {
-            window.analytics.trackUserAction('post_created', {
-                content_length: text.length,
-                author: auth.currentUser.username
-            });
-            document.dispatchEvent(new CustomEvent('postCreated', {
-                detail: { content: text }
-            }));
-        }
+        showToast('Chapisho limechapishwa!', 'success');
+        document.dispatchEvent(new CustomEvent('postCreated', {
+            detail: { content: text }
+        }));
     }
     
     toggleLike(postId) {
@@ -117,7 +103,7 @@ class PostManager {
         if (!post) return;
         
         if (!auth.currentUser) {
-            showNotification('Ingia kwanza ili kupenda!', 'warning');
+            showToast('Ingia kwanza ili kupenda!', 'warning');
             document.getElementById('loginModal').classList.add('show');
             return;
         }
@@ -126,11 +112,6 @@ class PostManager {
         post.likes += post.liked ? 1 : -1;
         this.savePosts();
         this.renderPosts();
-        
-        // Track like
-        if (window.analytics) {
-            window.analytics.trackEvent('Post', post.liked ? 'like' : 'unlike', postId);
-        }
     }
     
     renderPosts() {
@@ -139,51 +120,34 @@ class PostManager {
         
         if (this.posts.length === 0) {
             container.innerHTML = `
-                <div style="text-align:center;padding:40px;color:#888;">
-                    <div style="font-size:3rem;margin-bottom:12px;">🌾</div>
-                    <h3>Hakuna chapisho bado</h3>
-                    <p>Kuwa wa kwanza kuchapisha!</p>
+                <div class="morph-card text-center" style="padding:40px;">
+                    <i class="fas fa-newspaper" style="font-size:3rem;color:rgba(255,255,255,0.1);"></i>
+                    <p style="color:rgba(255,255,255,0.3);margin-top:8px;">Hakuna chapisho bado</p>
                 </div>
             `;
             return;
         }
         
         container.innerHTML = this.posts.map(post => `
-            <div class="post-card" data-track="post-view">
+            <div class="post-card">
                 <div class="post-header">
                     <img src="${post.authorAvatar}" alt="${post.author}" class="avatar">
                     <div>
-                        <div class="post-author">${post.author}</div>
-                        <div class="post-time">${this.formatTime(post.time)}</div>
+                        <div class="name">${post.author}</div>
+                        <div class="time"><i class="far fa-clock"></i> ${this.formatTime(post.time)}</div>
                     </div>
                 </div>
-                <div class="post-content">${this.formatContent(post.content)}</div>
+                <div class="post-body">${post.content}</div>
                 <div class="post-actions">
-                    <button onclick="window.postManager.toggleLike('${post.id}')" 
-                            class="${post.liked ? 'liked' : ''}" data-track="post-like">
-                        ${post.liked ? '❤️' : '🤍'} ${post.likes}
+                    <button onclick="window.postManager.toggleLike('${post.id}')" class="${post.liked ? 'liked' : ''}">
+                        <i class="${post.liked ? 'fas' : 'far'} fa-heart"></i> ${post.likes}
                     </button>
-                    <button onclick="window.showNotification('Maoni yanaandaliwa...', 'info')" data-track="post-comment">
-                        💬 ${post.comments}
-                    </button>
-                    <button onclick="window.showNotification('Imehifadhiwa!', 'success')" data-track="post-save">
-                        🔖
-                    </button>
-                    <button onclick="window.sharePost('${post.id}')" data-track="post-share">
-                        📤
-                    </button>
+                    <button><i class="far fa-comment"></i> ${post.comments}</button>
+                    <button><i class="far fa-bookmark"></i></button>
+                    <button><i class="fas fa-share-alt"></i></button>
                 </div>
             </div>
         `).join('');
-    }
-    
-    formatContent(content) {
-        // Convert URLs to links
-        return content.replace(/(https?:\/\/[^\s]+)/g, 
-            '<a href="$1" target="_blank" style="color:var(--gold);">$1</a>'
-        ).replace(/#(\w+)/g, 
-            '<span style="color:var(--primary);font-weight:600;">#$1</span>'
-        );
     }
     
     formatTime(timestamp) {
@@ -200,32 +164,5 @@ class PostManager {
     }
 }
 
-// Initialize Posts
 const postManager = new PostManager();
 window.postManager = postManager;
-
-// Share post function
-window.sharePost = function(postId) {
-    if (navigator.share) {
-        navigator.share({
-            title: 'Kilimo Smart',
-            text: 'Angalia chapisho hili kwenye Kilimo Smart!',
-            url: window.location.href
-        }).then(() => {
-            if (window.analytics) {
-                window.analytics.trackEvent('Post', 'share_success', postId);
-            }
-        }).catch(() => {
-            if (window.analytics) {
-                window.analytics.trackEvent('Post', 'share_cancel', postId);
-            }
-        });
-    } else {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-            showNotification('Kiungo kimenakiliwa!', 'success');
-            if (window.analytics) {
-                window.analytics.trackEvent('Post', 'share_clipboard', postId);
-            }
-        });
-    }
-};
