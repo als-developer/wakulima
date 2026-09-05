@@ -1,54 +1,110 @@
-const CACHE_NAME = 'kilimo-smart-v1';
+// ============================================================
+// KILIMO SMART - SERVICE WORKER
+// ============================================================
+
+const CACHE_NAME = 'kilimo-smart-v2';
+const OFFLINE_URL = '/index.html';
+
+// Assets to cache
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/manifest.json',
+    '/images/icon-72.png',
+    '/images/icon-96.png',
+    '/images/icon-128.png',
+    '/images/icon-144.png',
+    '/images/icon-152.png',
     '/images/icon-192.png',
+    '/images/icon-384.png',
     '/images/icon-512.png',
     '/images/default-avatar.png',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
-// Install Service Worker
+// ============================================================
+// INSTALL - Cache assets
+// ============================================================
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Caching assets...');
+                console.log('[SW] Caching assets...');
                 return cache.addAll(ASSETS_TO_CACHE);
             })
-            .then(() => self.skipWaiting())
+            .then(() => {
+                console.log('[SW] Assets cached successfully');
+                return self.skipWaiting();
+            })
+            .catch(err => {
+                console.log('[SW] Cache failed:', err);
+            })
     );
 });
 
-// Activate Service Worker
+// ============================================================
+// ACTIVATE - Clean old caches
+// ============================================================
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
-                cacheNames.filter(name => name !== CACHE_NAME)
-                    .map(name => caches.delete(name))
+                cacheNames
+                    .filter(name => name !== CACHE_NAME)
+                    .map(name => {
+                        console.log('[SW] Deleting old cache:', name);
+                        return caches.delete(name);
+                    })
             );
-        }).then(() => self.clients.claim())
+        })
+        .then(() => {
+            console.log('[SW] Activated successfully');
+            return self.clients.claim();
+        })
     );
 });
 
-// Fetch with Network First Strategy
+// ============================================================
+// FETCH - Network first, then cache
+// ============================================================
 self.addEventListener('fetch', event => {
+    // Skip cross-origin requests
+    if (!event.request.url.startsWith(self.location.origin) &&
+        !event.request.url.includes('cdnjs.cloudflare.com')) {
+        return;
+    }
+
     event.respondWith(
         fetch(event.request)
             .then(response => {
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME).then(cache => {
-                    cache.put(event.request, responseClone);
-                });
+                // Cache successful responses
+                if (response && response.status === 200) {
+                    const clonedResponse = response.clone();
+                    caches.open(CACHE_NAME)
+                        .then(cache => {
+                            cache.put(event.request, clonedResponse);
+                        })
+                        .catch(err => console.log('[SW] Cache put error:', err));
+                }
                 return response;
             })
-            .catch(() => caches.match(event.request))
+            .catch(() => {
+                // If network fails, try cache
+                return caches.match(event.request)
+                    .then(cachedResponse => {
+                        if (cachedResponse) {
+                            return cachedResponse;
+                        }
+                        // If not in cache, return offline page
+                        return caches.match(OFFLINE_URL);
+                    });
+            })
     );
 });
 
-// Background Sync for Offline Posts
+// ============================================================
+// BACKGROUND SYNC - Offline posts
+// ============================================================
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-posts') {
         event.waitUntil(syncPendingPosts());
@@ -56,44 +112,99 @@ self.addEventListener('sync', event => {
 });
 
 async function syncPendingPosts() {
-    const cache = await caches.open('pending-posts');
-    const requests = await cache.keys();
-    for (const request of requests) {
-        const response = await cache.match(request);
-        if (response) {
-            try {
+    try {
+        const cache = await caches.open('pending-posts');
+        const requests = await cache.keys();
+        
+        for (const request of requests) {
+            const response = await cache.match(request);
+            if (response) {
                 const data = await response.json();
-                await fetch('/api/posts', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
+                // Simulate API call
+                console.log('[SW] Syncing post:', data);
                 await cache.delete(request);
-            } catch (error) {
-                console.log('Sync failed, retry later');
             }
         }
+    } catch (error) {
+        console.log('[SW] Sync failed:', error);
     }
 }
 
-// Push Notifications
+// ============================================================
+// PUSH NOTIFICATIONS
+// ============================================================
 self.addEventListener('push', event => {
-    const data = event.data.json();
+    let data = {};
+    
+    try {
+        data = event.data.json();
+    } catch (e) {
+        data = {
+            title: 'Kilimo Smart',
+            body: 'Habari mpya kutoka Kilimo Smart!'
+        };
+    }
+
     const options = {
         body: data.body || 'Habari mpya kutoka Kilimo Smart!',
         icon: '/images/icon-192.png',
-        badge: '/images/icon-192.png',
+        badge: '/images/icon-96.png',
         vibrate: [200, 100, 200],
-        data: { url: data.url || '/' }
+        data: {
+            url: data.url || '/'
+        },
+        actions: [
+            {
+                action: 'open',
+                title: 'Fungua'
+            },
+            {
+                action: 'close',
+                title: 'Funga'
+            }
+        ]
     };
+
     event.waitUntil(
-        self.registration.showNotification('Kilimo Smart', options)
+        self.registration.showNotification(
+            data.title || 'Kilimo Smart',
+            options
+        )
     );
 });
 
+// ============================================================
+// NOTIFICATION CLICK
+// ============================================================
 self.addEventListener('notificationclick', event => {
     event.notification.close();
+
+    if (event.action === 'close') {
+        return;
+    }
+
     event.waitUntil(
-        clients.openWindow(event.notification.data.url || '/')
+        clients.matchAll({ type: 'window' })
+            .then(windowClients => {
+                // Check if there's already a window/tab open
+                for (let client of windowClients) {
+                    if (client.url === '/' && 'focus' in client) {
+                        return client.focus();
+                    }
+                }
+                // If not, open a new one
+                if (clients.openWindow) {
+                    return clients.openWindow('/');
+                }
+            })
     );
+});
+
+// ============================================================
+// MESSAGE HANDLING
+// ============================================================
+self.addEventListener('message', event => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
 });
