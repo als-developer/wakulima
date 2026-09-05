@@ -8,12 +8,25 @@ class EducationManager {
     init() {
         this.renderCourses();
         
-        // Category filters
-        document.querySelectorAll('.edu-cat').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.edu-cat').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.filterCourses(btn.dataset.cat);
+        document.querySelectorAll('.edu-filter').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.edu-filter').forEach(b => {
+                    b.style.background = 'transparent';
+                    b.style.color = 'rgba(255,255,255,0.4)';
+                    b.style.borderColor = 'rgba(255,255,255,0.1)';
+                });
+                this.style.background = '#d4af37';
+                this.style.color = '#0d4a0d';
+                this.style.borderColor = '#d4af37';
+                
+                const category = this.dataset.cat;
+                if (category === 'all') {
+                    document.querySelectorAll('.edu-card').forEach(c => c.style.display = 'block');
+                } else {
+                    document.querySelectorAll('.edu-card').forEach(c => {
+                        c.style.display = c.dataset.cat === category ? 'block' : 'none';
+                    });
+                }
             });
         });
     }
@@ -29,98 +42,68 @@ class EducationManager {
                 id: '1',
                 title: 'Mbinu za Kilimo Endelevu',
                 category: 'kilimo',
-                description: 'Jifunze mbinu za kisasa za kilimo endelevu zenye tija na zisizoharibu mazingira.',
+                description: 'Jifunze mbinu za kisasa za kilimo endelevu zenye tija.',
                 duration: 'Saa 4',
-                level: 'Wote',
-                image: '🌿',
-                author: 'Dr. John Mwamba',
                 lessons: 12,
-                students: 234
+                students: 234,
+                icon: 'fa-seedling',
+                color: '#7dce82'
             },
             {
                 id: '2',
                 title: 'Ufugaji Bora wa Kuku',
                 category: 'ufugaji',
-                description: 'Mbinu bora za ufugaji wa kuku wa kienyeji na wa kisasa kwa faida kubwa.',
+                description: 'Mbinu bora za ufugaji wa kuku wa kienyeji na wa kisasa.',
                 duration: 'Saa 3',
-                level: 'Wote',
-                image: '🐔',
-                author: 'Mama Sarah',
                 lessons: 8,
-                students: 156
+                students: 156,
+                icon: 'fa-dog',
+                color: '#d4af37'
             },
             {
                 id: '3',
                 title: 'Biashara ya Mazao',
                 category: 'biashara',
-                description: 'Jinsi ya kuuza mazao yako kwa bei nzuri na kuunda mtandao wa wateja.',
+                description: 'Jinsi ya kuuza mazao yako kwa bei nzuri na kuunda wateja.',
                 duration: 'Saa 5',
-                level: 'Wote',
-                image: '📊',
-                author: 'Bi. Asha K.',
                 lessons: 15,
-                students: 312
+                students: 312,
+                icon: 'fa-hand-holding-usd',
+                color: '#7dce82'
             },
             {
                 id: '4',
                 title: 'Teknolojia katika Kilimo',
                 category: 'teknolojia',
-                description: 'Matumizi ya teknolojia ya kisasa kwa kilimo, ikiwemo sensorer na drones.',
+                description: 'Matumizi ya teknolojia ya kisasa kwa kilimo, ikiwemo sensorer.',
                 duration: 'Saa 6',
-                level: 'Wote',
-                image: '📱',
-                author: 'Eng. Peter',
                 lessons: 20,
-                students: 189
+                students: 189,
+                icon: 'fa-microchip',
+                color: '#d4af37'
             }
         ];
     }
     
-    filterCourses(category) {
-        const filtered = category === 'all' 
-            ? this.courses 
-            : this.courses.filter(c => c.category === category);
-        this.renderCourses(filtered);
-    }
-    
-    renderCourses(courses = null) {
+    renderCourses() {
         const container = document.getElementById('educationContent');
         if (!container) return;
         
-        const displayCourses = courses || this.courses;
-        
-        container.innerHTML = displayCourses.map(course => `
-            <div class="edu-card" onclick="window.educationManager.viewCourse('${course.id}')">
-                <div style="font-size:3rem;margin-bottom:8px;">${course.image}</div>
-                <h3 style="color:var(--primary);margin-bottom:4px;">${course.title}</h3>
-                <div style="color:var(--gold);font-weight:600;font-size:0.9rem;margin-bottom:8px;">
-                    ${course.category.toUpperCase()}
-                </div>
-                <p style="color:#666;margin:8px 0;font-size:0.9rem;">${course.description}</p>
-                <div style="display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;font-size:0.85rem;color:#888;">
-                    <span>⏱️ ${course.duration}</span>
-                    <span>📚 ${course.lessons} mafunzo</span>
-                    <span>👨‍🎓 ${course.students} wanafunzi</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;border-top:1px solid #eee;padding-top:12px;">
-                    <span style="font-weight:500;">${course.author}</span>
-                    <span style="font-size:0.8rem;background:var(--gold);color:white;padding:4px 12px;border-radius:20px;">
-                        ${course.level}
-                    </span>
+        container.innerHTML = this.courses.map(course => `
+            <div class="edu-card" data-cat="${course.category}">
+                <div class="icon"><i class="fas ${course.icon}" style="color:${course.color};"></i></div>
+                <h4>${course.title}</h4>
+                <div class="cat"><i class="fas fa-tag"></i> ${course.category.toUpperCase()}</div>
+                <p>${course.description}</p>
+                <div class="meta">
+                    <span><i class="far fa-clock"></i> ${course.duration}</span>
+                    <span><i class="fas fa-book"></i> ${course.lessons} mafunzo</span>
+                    <span><i class="fas fa-users"></i> ${course.students}</span>
                 </div>
             </div>
         `).join('');
     }
-    
-    viewCourse(courseId) {
-        const course = this.courses.find(c => c.id === courseId);
-        if (!course) return;
-        
-        showNotification(`Mafunzo: ${course.title} yanaandaliwa...`, 'info');
-        // Would navigate to course detail page
-    }
 }
 
-// Initialize Education
 const educationManager = new EducationManager();
 window.educationManager = educationManager;
