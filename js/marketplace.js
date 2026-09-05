@@ -11,6 +11,10 @@ class MarketplaceManager {
         // Filters
         document.getElementById('categoryFilter')?.addEventListener('change', () => {
             this.filterItems();
+            if (window.analytics) {
+                const category = document.getElementById('categoryFilter').value;
+                window.analytics.trackEvent('Marketplace', 'filter_category', category);
+            }
         });
         
         document.getElementById('searchMarket')?.addEventListener('input', () => {
@@ -111,7 +115,7 @@ class MarketplaceManager {
         }
         
         container.innerHTML = displayItems.map(item => `
-            <div class="marketplace-item">
+            <div class="marketplace-item" data-track="product-view" onclick="window.marketplaceManager.viewProduct('${item.id}')">
                 <div style="background:linear-gradient(135deg,#f0f0f0,#e0e0e0);height:200px;display:flex;align-items:center;justify-content:center;font-size:3rem;">
                     ${this.getCategoryIcon(item.category)}
                 </div>
@@ -124,7 +128,7 @@ class MarketplaceManager {
                     </div>
                     <p style="color:#666;font-size:0.9rem;margin:8px 0;">${item.description}</p>
                     <button onclick="window.marketplaceManager.buyItem('${item.id}')" 
-                            class="btn-primary" style="width:100%;">
+                            class="btn-primary" style="width:100%;" data-track="buy-${item.id}">
                         Nunua Sasa
                     </button>
                 </div>
@@ -150,6 +154,24 @@ class MarketplaceManager {
         return '⭐'.repeat(full) + (half ? '✨' : '') + '☆'.repeat(empty);
     }
     
+    viewProduct(itemId) {
+        const item = this.items.find(i => i.id === itemId);
+        if (!item) return;
+        
+        if (window.analytics) {
+            window.analytics.trackUserAction('product_viewed', {
+                product: item.title,
+                category: item.category,
+                price: item.price
+            });
+            document.dispatchEvent(new CustomEvent('productViewed', {
+                detail: { product: item.title }
+            }));
+        }
+        
+        showNotification(`Tazama: ${item.title}`, 'info');
+    }
+    
     buyItem(itemId) {
         if (!auth.currentUser) {
             showNotification('Ingia kwanza ili kununua!', 'warning');
@@ -161,6 +183,14 @@ class MarketplaceManager {
         if (!item) return;
         
         showNotification(`Umeweka ${item.title} kwenye kikapu!`, 'success');
+        
+        if (window.analytics) {
+            window.analytics.trackUserAction('buy_click', {
+                product: item.title,
+                price: item.price,
+                seller: item.seller
+            });
+        }
     }
 }
 
