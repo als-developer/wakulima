@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#1a5c1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <base href="/"> <!-- ADDED for Heroku routing -->
     <title>Kilimo Smart - Jukwaa la Wakulima</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/style.css">
@@ -22,25 +23,25 @@
                 <span class="logo-text">Kilimo<span class="gold">Smart</span></span>
             </div>
             <div class="nav-menu">
-                <a href="#" class="nav-link active" data-page="home">
+                <a href="#" class="nav-link active" data-page="home" data-track="nav-home">
                     <i class="icon-home"></i> Nyumbani
                 </a>
-                <a href="#" class="nav-link" data-page="marketplace">
+                <a href="#" class="nav-link" data-page="marketplace" data-track="nav-marketplace">
                     <i class="icon-market"></i> Soko
                 </a>
-                <a href="#" class="nav-link" data-page="education">
+                <a href="#" class="nav-link" data-page="education" data-track="nav-education">
                     <i class="icon-education"></i> Elimu
                 </a>
-                <a href="#" class="nav-link" data-page="community">
+                <a href="#" class="nav-link" data-page="community" data-track="nav-community">
                     <i class="icon-community"></i> Jamii
                 </a>
-                <a href="#" class="nav-link" data-page="profile">
+                <a href="#" class="nav-link" data-page="profile" data-track="nav-profile">
                     <i class="icon-profile"></i> Wasifu
                 </a>
             </div>
             <div class="nav-actions">
-                <button id="darkModeToggle" class="dark-toggle">🌙</button>
-                <button id="notifBtn" class="notif-btn">🔔 <span class="notif-badge">3</span></button>
+                <button id="darkModeToggle" class="dark-toggle" data-track="dark-toggle">🌙</button>
+                <button id="notifBtn" class="notif-btn" data-track="notifications">🔔 <span class="notif-badge">3</span></button>
             </div>
         </div>
     </nav>
@@ -56,15 +57,15 @@
 
             <!-- Quick Stats -->
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card" data-track="stat-farmers">
                     <div class="stat-number">12,458</div>
                     <div class="stat-label">Wakulima</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-track="stat-products">
                     <div class="stat-number">3,247</div>
                     <div class="stat-label">Bidhaa</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-track="stat-courses">
                     <div class="stat-number">892</div>
                     <div class="stat-label">Mafunzo</div>
                 </div>
@@ -75,7 +76,7 @@
                 <div class="create-post">
                     <img src="images/default-avatar.png" alt="Avatar" class="avatar">
                     <input type="text" placeholder="Andika chapisho lako..." id="postInput">
-                    <button id="postBtn" class="btn-primary">Chapisha</button>
+                    <button id="postBtn" class="btn-primary" data-track="create-post">Chapisha</button>
                 </div>
                 <div id="postsContainer" class="posts-container">
                     <!-- Posts rendered by JS -->
@@ -87,7 +88,7 @@
         <section id="marketplacePage" class="page">
             <h2>Soko la Kilimo</h2>
             <div class="marketplace-filters">
-                <select id="categoryFilter">
+                <select id="categoryFilter" data-track="filter-category">
                     <option value="all">Kategoria zote</option>
                     <option value="mbolea">Mbolea</option>
                     <option value="mbegu">Mbegu</option>
@@ -95,7 +96,7 @@
                     <option value="nafaka">Nafaka</option>
                     <option value="dawa">Dawa za mimea</option>
                 </select>
-                <input type="text" placeholder="Tafuta bidhaa..." id="searchMarket">
+                <input type="text" placeholder="Tafuta bidhaa..." id="searchMarket" data-track="search-market">
             </div>
             <div id="marketplaceItems" class="marketplace-grid">
                 <!-- Rendered by JS -->
@@ -106,11 +107,11 @@
         <section id="educationPage" class="page">
             <h2>Elimu ya Kilimo</h2>
             <div class="edu-categories">
-                <button class="edu-cat active" data-cat="all">Zote</button>
-                <button class="edu-cat" data-cat="kilimo">Kilimo</button>
-                <button class="edu-cat" data-cat="ufugaji">Ufugaji</button>
-                <button class="edu-cat" data-cat="biashara">Biashara</button>
-                <button class="edu-cat" data-cat="teknolojia">Teknolojia</button>
+                <button class="edu-cat active" data-cat="all" data-track="edu-all">Zote</button>
+                <button class="edu-cat" data-cat="kilimo" data-track="edu-kilimo">Kilimo</button>
+                <button class="edu-cat" data-cat="ufugaji" data-track="edu-ufugaji">Ufugaji</button>
+                <button class="edu-cat" data-cat="biashara" data-track="edu-biashara">Biashara</button>
+                <button class="edu-cat" data-cat="teknolojia" data-track="edu-teknolojia">Teknolojia</button>
             </div>
             <div id="educationContent" class="edu-grid">
                 <!-- Rendered by JS -->
@@ -121,9 +122,9 @@
         <section id="communityPage" class="page">
             <h2>Jamii ya Wakulima</h2>
             <div class="community-tabs">
-                <button class="comm-tab active" data-tab="groups">Vikundi</button>
-                <button class="comm-tab" data-tab="events">Matukio</button>
-                <button class="comm-tab" data-tab="discussions">Majadiliano</button>
+                <button class="comm-tab active" data-tab="groups" data-track="comm-groups">Vikundi</button>
+                <button class="comm-tab" data-tab="events" data-track="comm-events">Matukio</button>
+                <button class="comm-tab" data-tab="discussions" data-track="comm-discussions">Majadiliano</button>
             </div>
             <div id="communityContent">
                 <!-- Rendered by JS -->
@@ -143,13 +144,13 @@
                         <span><strong>230</strong> Wanafuata</span>
                         <span><strong>45</strong> Chapisho</span>
                     </div>
-                    <button class="btn-primary" id="editProfileBtn">Hariri Wasifu</button>
+                    <button class="btn-primary" id="editProfileBtn" data-track="edit-profile">Hariri Wasifu</button>
                 </div>
             </div>
             <div class="profile-tabs">
-                <button class="prof-tab active" data-tab="posts">Chapisho</button>
-                <button class="prof-tab" data-tab="products">Bidhaa</button>
-                <button class="prof-tab" data-tab="saved">Zilizohifadhiwa</button>
+                <button class="prof-tab active" data-tab="posts" data-track="profile-posts">Chapisho</button>
+                <button class="prof-tab" data-tab="products" data-track="profile-products">Bidhaa</button>
+                <button class="prof-tab" data-tab="saved" data-track="profile-saved">Zilizohifadhiwa</button>
             </div>
             <div id="profileContent">
                 <!-- Rendered by JS -->
@@ -159,23 +160,23 @@
 
     <!-- Bottom Navigation for Mobile -->
     <div class="bottom-nav">
-        <button class="bottom-nav-item active" data-page="home">
+        <button class="bottom-nav-item active" data-page="home" data-track="bnav-home">
             <span>🏠</span>
             <span>Nyumbani</span>
         </button>
-        <button class="bottom-nav-item" data-page="marketplace">
+        <button class="bottom-nav-item" data-page="marketplace" data-track="bnav-marketplace">
             <span>🛒</span>
             <span>Soko</span>
         </button>
-        <button class="bottom-nav-item" data-page="education">
+        <button class="bottom-nav-item" data-page="education" data-track="bnav-education">
             <span>📚</span>
             <span>Elimu</span>
         </button>
-        <button class="bottom-nav-item" data-page="community">
+        <button class="bottom-nav-item" data-page="community" data-track="bnav-community">
             <span>👥</span>
             <span>Jamii</span>
         </button>
-        <button class="bottom-nav-item" data-page="profile">
+        <button class="bottom-nav-item" data-page="profile" data-track="bnav-profile">
             <span>👤</span>
             <span>Wasifu</span>
         </button>
@@ -188,11 +189,11 @@
             <h3>Chapisha Chapisho</h3>
             <textarea id="postTextarea" placeholder="Ni nini kipya?..."></textarea>
             <div class="post-options">
-                <button class="btn-option">📷 Picha</button>
-                <button class="btn-option">🎥 Video</button>
-                <button class="btn-option">📍 Eneo</button>
+                <button class="btn-option" data-track="post-photo">📷 Picha</button>
+                <button class="btn-option" data-track="post-video">🎥 Video</button>
+                <button class="btn-option" data-track="post-location">📍 Eneo</button>
             </div>
-            <button id="submitPostBtn" class="btn-primary">Chapisha</button>
+            <button id="submitPostBtn" class="btn-primary" data-track="submit-post">Chapisha</button>
         </div>
     </div>
 
@@ -208,12 +209,14 @@
                     <option value="business">Biashara</option>
                     <option value="brand">Brand</option>
                 </select>
-                <button type="submit" class="btn-primary">Ingia</button>
-                <p class="auth-switch">Huna akaunti? <a href="#" id="switchToRegister">Jisajili</a></p>
+                <button type="submit" class="btn-primary" data-track="auth-submit">Ingia</button>
+                <p class="auth-switch">Huna akaunti? <a href="#" id="switchToRegister" data-track="auth-switch">Jisajili</a></p>
             </form>
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script src="js/analytics.js"></script>
     <script src="js/app.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/posts.js"></script>
