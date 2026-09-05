@@ -6,75 +6,49 @@ class WeatherManager {
     
     init() {
         this.getWeather();
-        
-        // Refresh weather every 30 minutes
         setInterval(() => this.getWeather(), 1800000);
     }
     
     getWeather() {
-        // Use free weather API or simulate
-        // For demo, we'll use simulated data
-        const weatherData = this.simulateWeather();
-        this.displayWeather(weatherData);
+        const data = this.simulateWeather();
+        this.displayWeather(data);
     }
     
     simulateWeather() {
-        const conditions = ['☀️ Jua kali', '⛅ Mawingu', '🌤️ Jua na mawingu', '🌧️ Mvua'];
+        const conditions = ['Jua kali', 'Mawingu', 'Jua na mawingu', 'Mvua'];
+        const icons = ['fa-sun', 'fa-cloud', 'fa-cloud-sun', 'fa-cloud-rain'];
         const temps = [28, 30, 25, 32, 27, 29, 31];
+        const index = Math.floor(Math.random() * conditions.length);
         
         return {
             temp: temps[Math.floor(Math.random() * temps.length)],
-            condition: conditions[Math.floor(Math.random() * conditions.length)],
+            condition: conditions[index],
+            icon: icons[index],
             humidity: 50 + Math.floor(Math.random() * 40),
             wind: 5 + Math.floor(Math.random() * 20)
         };
     }
     
     displayWeather(data) {
-        // Find weather element or create one
-        let weatherEl = document.querySelector('.weather-widget');
+        const widget = document.querySelector('.weather-widget');
+        if (!widget) return;
         
-        if (!weatherEl) {
-            weatherEl = document.createElement('div');
-            weatherEl.className = 'weather-widget';
-            weatherEl.style.cssText = `
-                background: white;
-                padding: 16px 20px;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow);
-                margin: 16px 0;
-                border-left: 4px solid var(--gold);
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-                gap: 12px;
-            `;
-            
-            const homePage = document.getElementById('homePage');
-            if (homePage) {
-                homePage.insertBefore(weatherEl, homePage.firstChild);
-            }
-        }
-        
-        weatherEl.innerHTML = `
-            <div style="display:flex;align-items:center;gap:12px;">
-                <span style="font-size:2rem;">${data.condition.split(' ')[0]}</span>
+        widget.innerHTML = `
+            <div class="left">
+                <span class="icon"><i class="fas ${data.icon}"></i></span>
                 <div>
-                    <div style="font-weight:600;font-size:1.2rem;">${data.temp}°C</div>
-                    <div style="color:#666;font-size:0.9rem;">${data.condition}</div>
+                    <div class="temp">${data.temp}°C</div>
+                    <div class="cond"><i class="fas fa-cloud-sun"></i> ${data.condition}</div>
                 </div>
             </div>
-            <div style="display:flex;gap:20px;color:#666;font-size:0.9rem;">
-                <span>💧 ${data.humidity}%</span>
-                <span>💨 ${data.wind} km/h</span>
+            <div class="right">
+                <span><i class="fas fa-tint"></i> ${data.humidity}%</span>
+                <span><i class="fas fa-wind"></i> ${data.wind} km/h</span>
             </div>
-            <div style="font-size:0.8rem;color:#888;">
-                🕐 Imesasishwa: ${new Date().toLocaleTimeString('sw')}
-            </div>
+            <div class="updated"><i class="fas fa-clock"></i> Imesasishwa sasa hivi</div>
         `;
     }
 }
 
-// Initialize Weather
 const weatherManager = new WeatherManager();
+window.weatherManager = weatherManager;
