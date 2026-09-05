@@ -16,7 +16,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512.png">
     
-    <!-- Font Awesome 6 -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
@@ -31,34 +31,28 @@
             --gold-main: #d4af37;
             --gold-light: #f0d060;
             --gold-glow: rgba(212, 175, 55, 0.4);
-            --morph-bg: rgba(255, 255, 255, 0.06);
-            --morph-border: rgba(255, 255, 255, 0.08);
-            --radius: 20px;
+            --radius: 16px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: radial-gradient(ellipse at top, #0d4a0d, #061f06);
             color: white;
             min-height: 100vh;
-            padding-bottom: 90px;
-            padding-top: 65px;
+            padding-bottom: 80px;
+            padding-top: 60px;
             overflow-x: hidden;
         }
         
         /* ============================================================
            SCROLLBAR
            ============================================================ */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--gold-main), var(--gold-light)); border-radius: 10px; }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-main); border-radius: 10px; }
         
         /* ============================================================
            NAVIGATION
@@ -70,9 +64,9 @@
             right: 0;
             z-index: 1000;
             background: rgba(13, 74, 13, 0.92);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 4px 30px rgba(0,0,0,0.4);
             padding: 6px 14px;
         }
@@ -89,63 +83,55 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 4px 12px 4px 4px;
-            border-radius: 60px;
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.06);
+            padding: 3px 10px 3px 3px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
             transition: var(--transition);
             cursor: pointer;
         }
-        .logo-wrapper:hover {
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 30px rgba(46,204,113,0.15);
-        }
+        .logo-wrapper:hover { background: rgba(255,255,255,0.08); }
         .logo-img {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--gold-main);
             box-shadow: 0 0 20px var(--gold-glow);
         }
         .logo-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
-            letter-spacing: -0.5px;
         }
         .logo-text .green { color: var(--green-lime); }
         .logo-text .gold { color: var(--gold-main); }
         
         .nav-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             align-items: center;
         }
         .nav-btn {
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.05);
             border: none;
             color: white;
-            padding: 6px 10px;
+            padding: 6px 8px;
             border-radius: 50%;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             position: relative;
         }
-        .nav-btn:hover {
-            background: rgba(255,255,255,0.15);
-            transform: scale(1.05);
-        }
+        .nav-btn:hover { background: rgba(255,255,255,0.12); }
         .nav-btn .badge {
             position: absolute;
-            top: -2px;
-            right: -2px;
+            top: -1px;
+            right: -1px;
             background: #ff4444;
             color: white;
             border-radius: 50%;
             padding: 1px 5px;
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 700;
         }
         
@@ -153,21 +139,18 @@
             background: linear-gradient(135deg, var(--gold-main), #b8860b);
             color: white;
             border: none;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
             transition: var(--transition);
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--gold-glow);
-        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--gold-glow); }
         .btn-primary:active { transform: scale(0.96); }
         
         /* ============================================================
-           BOTTOM NAVIGATION
+           BOTTOM NAV
            ============================================================ */
         .bottom-nav {
             position: fixed;
@@ -176,48 +159,43 @@
             right: 0;
             z-index: 1000;
             background: rgba(13, 74, 13, 0.94);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-top: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-top: 1px solid rgba(255,255,255,0.04);
             box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
             display: flex;
             justify-content: space-around;
-            padding: 4px 0 10px;
+            padding: 4px 0 8px;
         }
         
         .bottom-item {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.35);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1px;
-            padding: 4px 8px;
+            gap: 0px;
+            padding: 4px 6px;
             cursor: pointer;
             transition: var(--transition);
             position: relative;
             flex: 1;
         }
-        .bottom-item .icon { font-size: 1.2rem; transition: var(--transition); }
-        .bottom-item .label { font-size: 0.5rem; transition: var(--transition); }
-        .bottom-item.active {
-            color: var(--gold-main);
-        }
-        .bottom-item.active .icon { transform: translateY(-3px); }
-        .bottom-item.active .label {
-            color: var(--gold-main);
-            font-weight: 600;
-        }
+        .bottom-item .icon { font-size: 1.1rem; transition: var(--transition); }
+        .bottom-item .label { font-size: 0.45rem; transition: var(--transition); }
+        .bottom-item.active { color: var(--gold-main); }
+        .bottom-item.active .icon { transform: translateY(-2px); }
+        .bottom-item.active .label { color: var(--gold-main); font-weight: 600; }
         .bottom-item.active::before {
             content: '';
             position: absolute;
             top: -2px;
             left: 50%;
             transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--gold-light), var(--gold-main));
+            width: 18px;
+            height: 2px;
+            background: var(--gold-main);
             border-radius: 10px;
             box-shadow: 0 0 20px var(--gold-glow);
         }
@@ -229,13 +207,13 @@
             display: none;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 14px;
-            animation: fadeUp 0.4s ease;
+            padding: 0 12px;
+            animation: fadeUp 0.3s ease;
         }
         .page.active { display: block; }
         
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
@@ -243,30 +221,24 @@
            CARDS
            ============================================================ */
         .morph-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: var(--radius);
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 6px 6px 16px rgba(0,0,0,0.2), -6px -6px 16px rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: 4px 4px 12px rgba(0,0,0,0.15), -4px -4px 12px rgba(255,255,255,0.03);
             transition: var(--transition);
-            padding: 16px;
-            margin: 10px 0;
+            padding: 14px;
+            margin: 8px 0;
         }
-        .morph-card:hover { transform: translateY(-3px); }
+        .morph-card:hover { transform: translateY(-2px); }
         .morph-card:active { transform: scale(0.98); }
         
         /* ============================================================
            WELCOME
            ============================================================ */
-        .welcome {
-            text-align: center;
-            padding: 10px 0 4px;
-        }
-        .welcome h1 {
-            font-size: 1.6rem;
-            margin-bottom: 2px;
-        }
+        .welcome { text-align: center; padding: 8px 0 2px; }
+        .welcome h1 { font-size: 1.4rem; margin-bottom: 1px; }
         .welcome h1 .green {
             background: linear-gradient(135deg, var(--green-lime), var(--green-light));
             -webkit-background-clip: text;
@@ -279,10 +251,7 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .welcome p {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.8rem;
-        }
+        .welcome p { color: rgba(255,255,255,0.35); font-size: 0.75rem; }
         .welcome p i { color: var(--gold-main); }
         
         /* ============================================================
@@ -291,106 +260,99 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin: 10px 0;
+            gap: 6px;
+            margin: 8px 0;
         }
         .stat-card {
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(12px);
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.04);
-            padding: 12px 8px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 10px 6px;
             text-align: center;
-            transition: var(--transition);
         }
-        .stat-card:hover { transform: translateY(-4px); }
-        .stat-card .icon { font-size: 1.2rem; color: var(--gold-main); }
+        .stat-card .icon { font-size: 1.1rem; color: var(--gold-main); }
         .stat-card .number {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 800;
             background: linear-gradient(135deg, var(--gold-light), var(--gold-main));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .stat-card .label { color: rgba(255,255,255,0.5); font-size: 0.6rem; margin-top: 2px; }
-        .stat-card .change { font-size: 0.55rem; color: var(--green-lime); }
+        .stat-card .label { color: rgba(255,255,255,0.4); font-size: 0.55rem; margin-top: 1px; }
+        .stat-card .change { font-size: 0.5rem; color: var(--green-lime); }
         
         /* ============================================================
            POSTS
            ============================================================ */
         .post-input {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(12px);
-            border-radius: 60px;
-            border: 1px solid rgba(255,255,255,0.06);
-            padding: 4px 8px 4px 14px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.04);
+            padding: 3px 6px 3px 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin: 10px 0;
+            gap: 6px;
+            margin: 8px 0;
         }
         .post-input input {
             flex: 1;
             background: transparent;
             border: none;
-            padding: 8px 4px;
-            font-size: 0.8rem;
+            padding: 6px 4px;
+            font-size: 0.75rem;
             color: white;
             outline: none;
         }
-        .post-input input::placeholder { color: rgba(255,255,255,0.3); }
+        .post-input input::placeholder { color: rgba(255,255,255,0.25); }
         .post-input .avatar {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             border: 2px solid var(--gold-main);
             object-fit: cover;
         }
         
         .post-card {
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            border: 1px solid rgba(255,255,255,0.04);
-            padding: 12px 14px;
-            margin: 8px 0;
-            transition: var(--transition);
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 10px 12px;
+            margin: 6px 0;
         }
-        .post-card:hover { border-color: rgba(212,175,55,0.15); }
         .post-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .post-header .avatar {
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             border: 2px solid var(--gold-main);
             object-fit: cover;
         }
-        .post-header .name { font-weight: 600; color: white; font-size: 0.85rem; }
-        .post-header .time { color: rgba(255,255,255,0.3); font-size: 0.6rem; }
-        .post-body { color: rgba(255,255,255,0.75); font-size: 0.85rem; line-height: 1.5; margin: 6px 0; }
+        .post-header .name { font-weight: 600; color: white; font-size: 0.8rem; }
+        .post-header .time { color: rgba(255,255,255,0.25); font-size: 0.55rem; }
+        .post-body { color: rgba(255,255,255,0.7); font-size: 0.8rem; line-height: 1.4; margin: 4px 0; }
         .post-actions {
             display: flex;
-            gap: 12px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.04);
+            gap: 10px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.03);
         }
         .post-actions button {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.25);
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 0.75rem;
+            gap: 3px;
+            font-size: 0.7rem;
             transition: var(--transition);
         }
-        .post-actions button:hover { color: rgba(255,255,255,0.6); }
+        .post-actions button:hover { color: rgba(255,255,255,0.5); }
         .post-actions button.liked { color: #ff6b6b; }
         
         /* ============================================================
@@ -398,162 +360,145 @@
            ============================================================ */
         .market-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
         }
         .product-card {
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
             transition: var(--transition);
         }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.25); }
+        .product-card:hover { transform: translateY(-3px); }
         .product-card .img {
-            height: 90px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2rem;
-            background: linear-gradient(135deg, rgba(46,204,113,0.08), rgba(13,74,13,0.12));
+            font-size: 2rem;
+            background: rgba(46,204,113,0.05);
         }
-        .product-card .info { padding: 8px 10px; }
-        .product-card .title { font-weight: 600; font-size: 0.8rem; color: white; }
-        .product-card .price { color: var(--gold-main); font-weight: 700; font-size: 0.85rem; }
-        .product-card .seller { color: rgba(255,255,255,0.3); font-size: 0.6rem; }
-        .product-card .rating { color: var(--gold-main); font-size: 0.6rem; }
+        .product-card .info { padding: 6px 8px; }
+        .product-card .title { font-weight: 600; font-size: 0.75rem; color: white; }
+        .product-card .price { color: var(--gold-main); font-weight: 700; font-size: 0.8rem; }
+        .product-card .seller { color: rgba(255,255,255,0.25); font-size: 0.55rem; }
+        .product-card .rating { color: var(--gold-main); font-size: 0.55rem; }
         .product-card .btn-buy {
             width: 100%;
-            padding: 4px;
+            padding: 3px;
             border-radius: 20px;
             border: none;
             background: linear-gradient(135deg, var(--gold-main), #b8860b);
             color: white;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-            margin-top: 4px;
+            margin-top: 3px;
         }
         .product-card .btn-buy:hover { transform: scale(1.02); }
         
         /* ============================================================
            EDUCATION
            ============================================================ */
-        .edu-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .edu-grid { display: grid; grid-template-columns: 1fr; gap: 6px; }
         .edu-card {
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            padding: 12px 14px;
-            border: 1px solid rgba(255,255,255,0.04);
-            transition: var(--transition);
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255,255,255,0.03);
         }
-        .edu-card:hover { border-color: rgba(212,175,55,0.15); transform: translateX(4px); }
-        .edu-card .icon { font-size: 1.6rem; }
-        .edu-card h4 { color: white; font-size: 0.85rem; margin: 2px 0; }
-        .edu-card .cat { color: var(--gold-main); font-size: 0.6rem; font-weight: 600; }
-        .edu-card p { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+        .edu-card .icon { font-size: 1.4rem; }
+        .edu-card h4 { color: white; font-size: 0.8rem; margin: 2px 0; }
+        .edu-card .cat { color: var(--gold-main); font-size: 0.55rem; font-weight: 600; }
+        .edu-card p { color: rgba(255,255,255,0.35); font-size: 0.7rem; }
         .edu-card .meta {
             display: flex;
-            gap: 10px;
-            font-size: 0.55rem;
+            gap: 8px;
+            font-size: 0.5rem;
             color: rgba(255,255,255,0.2);
-            margin-top: 4px;
+            margin-top: 3px;
         }
         
         /* ============================================================
            COMMUNITY
            ============================================================ */
         .comm-card {
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(10px);
-            border-radius: 14px;
-            padding: 10px 14px;
-            border: 1px solid rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255,255,255,0.03);
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: var(--transition);
             margin: 4px 0;
         }
-        .comm-card:hover { border-color: rgba(212,175,55,0.15); }
-        .comm-card .icon { font-size: 1.6rem; }
-        .comm-card .name { color: white; font-weight: 600; font-size: 0.8rem; }
-        .comm-card .members { color: rgba(255,255,255,0.3); font-size: 0.65rem; }
+        .comm-card .icon { font-size: 1.4rem; }
+        .comm-card .name { color: white; font-weight: 600; font-size: 0.75rem; }
+        .comm-card .members { color: rgba(255,255,255,0.25); font-size: 0.6rem; }
         .comm-card .btn-join {
             margin-left: auto;
-            padding: 3px 12px;
+            padding: 2px 10px;
             border-radius: 30px;
             border: 1px solid var(--gold-main);
             background: transparent;
             color: var(--gold-main);
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             cursor: pointer;
-            transition: var(--transition);
         }
-        .comm-card .btn-join:hover {
-            background: var(--gold-main);
-            color: #0d4a0d;
-        }
+        .comm-card .btn-join:hover { background: var(--gold-main); color: #0d4a0d; }
         
         /* ============================================================
            PROFILE
            ============================================================ */
         .profile-cover {
-            height: 110px;
+            height: 100px;
             background: linear-gradient(135deg, var(--green-deep), var(--gold-main));
             border-radius: var(--radius) var(--radius) 0 0;
             position: relative;
         }
         .profile-cover .btn-cover {
             position: absolute;
-            top: 8px;
-            right: 8px;
+            top: 6px;
+            right: 6px;
             background: rgba(0,0,0,0.3);
             border: none;
             color: white;
-            padding: 3px 10px;
+            padding: 2px 10px;
             border-radius: 30px;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             cursor: pointer;
             backdrop-filter: blur(10px);
         }
         .profile-body {
             text-align: center;
-            padding: 14px;
-            margin-top: -50px;
+            padding: 12px;
+            margin-top: -45px;
         }
         .profile-body .avatar {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
             border: 4px solid var(--gold-main);
             box-shadow: 0 0 30px var(--gold-glow);
             object-fit: cover;
         }
-        .profile-body h2 { color: white; font-size: 1rem; margin: 4px 0 2px; }
-        .profile-body .bio { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
+        .profile-body h2 { color: white; font-size: 0.95rem; margin: 4px 0 2px; }
+        .profile-body .bio { color: rgba(255,255,255,0.35); font-size: 0.7rem; }
         .profile-body .stats {
             display: flex;
             justify-content: center;
-            gap: 18px;
-            margin: 8px 0;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.4);
+            gap: 16px;
+            margin: 6px 0;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.35);
         }
         .profile-body .stats strong {
             display: block;
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--gold-main);
         }
-        .profile-body .btn-group {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+        .profile-body .btn-group { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
         
         /* ============================================================
            PROFILE TABS
@@ -562,74 +507,65 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 4px;
-            margin: 8px 0;
+            margin: 6px 0;
         }
         .prof-tab {
-            padding: 6px;
+            padding: 5px;
             border-radius: 10px;
             border: none;
-            background: rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.35);
             font-weight: 600;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             cursor: pointer;
-            transition: var(--transition);
         }
-        .prof-tab.active {
-            background: rgba(212,175,55,0.15);
-            color: var(--gold-main);
-        }
+        .prof-tab.active { background: rgba(212,175,55,0.12); color: var(--gold-main); }
         .prof-tab i { margin-right: 3px; }
         .prof-content { display: none; animation: fadeUp 0.3s ease; }
         .prof-content.active { display: block; }
         
         /* ============================================================
-           PWA INSTALL BANNER - KAMA CITY FIND
+           PWA INSTALL BANNER
            ============================================================ */
         #pwa-install-banner {
             position: fixed;
-            bottom: 70px;
+            bottom: 65px;
             left: 50%;
             transform: translateX(-50%);
             width: 94%;
-            max-width: 420px;
+            max-width: 400px;
             background: rgba(13, 74, 13, 0.96);
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-            padding: 14px 16px;
+            padding: 12px 14px;
             z-index: 9999;
-            animation: slideUp 0.5s ease;
-            display: flex;
+            animation: slideUp 0.4s ease;
+            display: none;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         
         #pwa-install-banner .banner-icon {
             flex-shrink: 0;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             border: 2px solid var(--gold-main);
             object-fit: cover;
         }
         
-        #pwa-install-banner .banner-text {
-            flex: 1;
-            min-width: 0;
-        }
-        
+        #pwa-install-banner .banner-text { flex: 1; min-width: 0; }
         #pwa-install-banner .banner-text .title {
             font-weight: 700;
             color: white;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
-        
         #pwa-install-banner .banner-text .subtitle {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.7rem;
+            color: rgba(255,255,255,0.35);
+            font-size: 0.65rem;
         }
         
         #pwa-install-banner .banner-actions {
@@ -642,15 +578,14 @@
             background: linear-gradient(135deg, var(--gold-main), #b8860b);
             color: white;
             border: none;
-            padding: 7px 14px;
+            padding: 6px 12px;
             border-radius: 30px;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
         }
-        
         #pwa-install-banner .btn-install:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 20px rgba(212,175,55,0.4);
@@ -658,155 +593,36 @@
         
         #pwa-install-banner .btn-dismiss {
             background: transparent;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.25);
             border: none;
-            padding: 6px 8px;
+            padding: 4px 6px;
             border-radius: 30px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
-        
-        #pwa-install-banner .btn-dismiss:hover {
-            color: white;
-            background: rgba(255,255,255,0.05);
-        }
+        #pwa-install-banner .btn-dismiss:hover { color: white; }
         
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
         
         /* ============================================================
-           INSTALLED STATE - KAMA CITY FIND
-           ============================================================ */
-        #pwa-installed-state {
-            position: fixed;
-            bottom: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 94%;
-            max-width: 420px;
-            background: rgba(13, 74, 13, 0.96);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 8px 40px rgba(0,0,0,0.6);
-            padding: 14px 16px;
-            z-index: 9999;
-            animation: slideUp 0.5s ease;
-            display: none;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        #pwa-installed-state .state-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(46,204,113,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: var(--green-lime);
-            flex-shrink: 0;
-        }
-        
-        #pwa-installed-state .state-text {
-            flex: 1;
-        }
-        
-        #pwa-installed-state .state-text .title {
-            font-weight: 700;
-            color: white;
-            font-size: 0.85rem;
-        }
-        
-        #pwa-installed-state .state-text .subtitle {
-            color: rgba(255,255,255,0.4);
-            font-size: 0.7rem;
-        }
-        
-        #pwa-installed-state .btn-open {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 7px 14px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 0.7rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        
-        #pwa-installed-state .btn-open:hover {
-            background: rgba(255,255,255,0.15);
-        }
-        
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
-        @media (max-width: 480px) {
-            .logo-text { font-size: 0.85rem; }
-            .logo-img { width: 28px; height: 28px; }
-            .logo-wrapper { padding: 2px 8px 2px 4px; }
-            .stat-card .number { font-size: 1.1rem; }
-            .stat-card { padding: 8px 4px; }
-            .market-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-            .product-card .img { height: 70px; font-size: 1.8rem; }
-            .product-card .info { padding: 6px 8px; }
-            .product-card .title { font-size: 0.7rem; }
-            .product-card .price { font-size: 0.75rem; }
-            .post-input { padding: 2px 6px 2px 10px; }
-            .post-input input { font-size: 0.7rem; padding: 6px 4px; }
-            .post-input .avatar { width: 28px; height: 28px; }
-            .post-card { padding: 8px 10px; }
-            .post-header .avatar { width: 30px; height: 30px; }
-            .post-header .name { font-size: 0.75rem; }
-            .post-body { font-size: 0.75rem; }
-            .bottom-item .icon { font-size: 1rem; }
-            .bottom-item .label { font-size: 0.45rem; }
-            #pwa-install-banner { padding: 10px 12px; bottom: 60px; }
-            #pwa-install-banner .banner-icon { width: 36px; height: 36px; }
-            #pwa-install-banner .banner-text .title { font-size: 0.75rem; }
-            #pwa-install-banner .banner-text .subtitle { font-size: 0.6rem; }
-            #pwa-install-banner .btn-install { font-size: 0.6rem; padding: 5px 10px; }
-            #pwa-installed-state { padding: 10px 12px; bottom: 60px; }
-            #pwa-installed-state .state-icon { width: 36px; height: 36px; font-size: 1.1rem; }
-            #pwa-installed-state .state-text .title { font-size: 0.75rem; }
-            #pwa-installed-state .state-text .subtitle { font-size: 0.6rem; }
-            #pwa-installed-state .btn-open { font-size: 0.6rem; padding: 5px 10px; }
-            .welcome h1 { font-size: 1.3rem; }
-            .profile-body .avatar { width: 60px; height: 60px; }
-            .profile-body h2 { font-size: 0.9rem; }
-        }
-        
-        /* ============================================================
-           WEATHER WIDGET
+           WEATHER
            ============================================================ */
         .weather-widget {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
         }
-        .weather-widget .left { display: flex; align-items: center; gap: 10px; }
-        .weather-widget .left .icon { font-size: 2rem; color: var(--gold-main); }
-        .weather-widget .left .temp { font-size: 1.2rem; font-weight: 700; color: white; }
-        .weather-widget .left .cond { color: rgba(255,255,255,0.4); font-size: 0.75rem; }
-        .weather-widget .right { display: flex; gap: 12px; color: rgba(255,255,255,0.3); font-size: 0.7rem; }
-        .weather-widget .right i { margin-right: 2px; }
-        .weather-widget .updated { font-size: 0.55rem; color: rgba(255,255,255,0.15); }
+        .weather-widget .left { display: flex; align-items: center; gap: 8px; }
+        .weather-widget .left .icon { font-size: 1.8rem; color: var(--gold-main); }
+        .weather-widget .left .temp { font-size: 1.1rem; font-weight: 700; color: white; }
+        .weather-widget .left .cond { color: rgba(255,255,255,0.35); font-size: 0.7rem; }
+        .weather-widget .right { display: flex; gap: 10px; color: rgba(255,255,255,0.25); font-size: 0.65rem; }
+        .weather-widget .updated { font-size: 0.5rem; color: rgba(255,255,255,0.12); }
         
         /* ============================================================
            SLIDES
@@ -815,101 +631,90 @@
             position: relative;
             overflow: hidden;
             border-radius: var(--radius);
-            margin: 10px 0;
+            margin: 8px 0;
         }
         .slides-wrapper {
             display: flex;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .slide-item {
             min-width: 100%;
-            padding: 18px 16px;
-            background: rgba(255,255,255,0.03);
-            backdrop-filter: blur(10px);
+            padding: 16px 14px;
+            background: rgba(255,255,255,0.02);
             border-radius: var(--radius);
-            border: 1px solid rgba(255,255,255,0.04);
         }
-        .slide-item .icon { font-size: 2.4rem; display: block; margin-bottom: 4px; }
-        .slide-item h3 { font-size: 1rem; margin-bottom: 2px; color: white; }
-        .slide-item p { color: rgba(255,255,255,0.45); font-size: 0.8rem; line-height: 1.4; }
+        .slide-item .icon { font-size: 2rem; display: block; margin-bottom: 4px; }
+        .slide-item h3 { font-size: 0.95rem; margin-bottom: 2px; color: white; }
+        .slide-item p { color: rgba(255,255,255,0.4); font-size: 0.75rem; line-height: 1.4; }
         .slide-item .btn-slide {
-            margin-top: 8px;
-            padding: 3px 14px;
+            margin-top: 6px;
+            padding: 2px 12px;
             border-radius: 30px;
             border: 1px solid var(--gold-main);
             background: transparent;
             color: var(--gold-main);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             cursor: pointer;
-            transition: var(--transition);
         }
-        .slide-item .btn-slide:hover {
-            background: var(--gold-main);
-            color: #0d4a0d;
-        }
+        .slide-item .btn-slide:hover { background: var(--gold-main); color: #0d4a0d; }
         
         .slide-dots {
             display: flex;
             justify-content: center;
-            gap: 6px;
-            padding: 8px 0 2px;
+            gap: 5px;
+            padding: 6px 0 2px;
         }
         .slide-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             border: none;
             cursor: pointer;
-            transition: var(--transition);
             padding: 0;
         }
         .slide-dot.active {
             background: var(--gold-main);
             box-shadow: 0 0 20px var(--gold-glow);
-            width: 24px;
+            width: 20px;
             border-radius: 10px;
         }
         
         /* ============================================================
            TABS
            ============================================================ */
-        .tabs-container { margin: 8px 0; }
+        .tabs-container { margin: 6px 0; }
         .tabs-header {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
-            background: rgba(255,255,255,0.03);
+            gap: 3px;
+            background: rgba(255,255,255,0.02);
             padding: 3px;
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.03);
         }
         .tab-btn {
-            padding: 6px 2px;
+            padding: 5px 2px;
             border: none;
             background: transparent;
-            color: rgba(255,255,255,0.4);
-            border-radius: 10px;
+            color: rgba(255,255,255,0.3);
+            border-radius: 8px;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 1px;
         }
-        .tab-btn i { font-size: 0.9rem; }
+        .tab-btn i { font-size: 0.8rem; }
         .tab-btn.active {
-            background: rgba(212,175,55,0.12);
+            background: rgba(212,175,55,0.1);
             color: var(--gold-main);
-        }
-        .tab-btn:hover:not(.active) {
-            background: rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.7);
         }
         .tab-content {
             display: none;
-            padding: 8px 0;
+            padding: 6px 0;
             animation: fadeUp 0.3s ease;
         }
         .tab-content.active { display: block; }
@@ -925,19 +730,19 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
             z-index: 2000;
             justify-content: center;
             align-items: center;
         }
         .modal.show { display: flex; }
         .modal-content {
-            background: rgba(13,74,13,0.95);
+            background: rgba(13,74,13,0.96);
             backdrop-filter: blur(30px);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 20px;
-            padding: 20px;
-            max-width: 460px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 18px;
+            padding: 18px;
+            max-width: 420px;
             width: 92%;
             max-height: 90vh;
             overflow-y: auto;
@@ -946,25 +751,23 @@
         .modal-content .close {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.4);
-            font-size: 1.3rem;
+            color: rgba(255,255,255,0.3);
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: var(--transition);
         }
         .modal-content .close:hover { color: white; }
-        .modal-content h3 { color: white; font-size: 1rem; margin-bottom: 10px; }
+        .modal-content h3 { color: white; font-size: 0.95rem; margin-bottom: 8px; }
         .modal-content input,
         .modal-content select,
         .modal-content textarea {
             width: 100%;
-            padding: 8px 12px;
+            padding: 7px 10px;
             border-radius: 10px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
             color: white;
-            margin: 4px 0;
-            font-size: 0.8rem;
-            transition: var(--transition);
+            margin: 3px 0;
+            font-size: 0.75rem;
         }
         .modal-content input:focus,
         .modal-content select:focus,
@@ -973,20 +776,57 @@
             border-color: var(--gold-main);
         }
         .modal-content input::placeholder,
-        .modal-content textarea::placeholder { color: rgba(255,255,255,0.25); }
+        .modal-content textarea::placeholder { color: rgba(255,255,255,0.2); }
         .modal-content select option { background: #0d4a0d; }
-        .modal-content .input-icon {
-            position: relative;
-        }
+        .modal-content .input-icon { position: relative; }
         .modal-content .input-icon i {
             position: absolute;
-            left: 12px;
+            left: 10px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.15);
         }
-        .modal-content .input-icon input {
-            padding-left: 36px;
+        .modal-content .input-icon input { padding-left: 32px; }
+        
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 480px) {
+            .logo-text { font-size: 0.8rem; }
+            .logo-img { width: 26px; height: 26px; }
+            .logo-wrapper { padding: 2px 8px 2px 3px; }
+            .stat-card .number { font-size: 1.1rem; }
+            .stat-card { padding: 6px 4px; }
+            .market-grid { grid-template-columns: 1fr 1fr; gap: 5px; }
+            .product-card .img { height: 60px; font-size: 1.6rem; }
+            .product-card .info { padding: 4px 6px; }
+            .product-card .title { font-size: 0.65rem; }
+            .product-card .price { font-size: 0.7rem; }
+            .post-input { padding: 2px 4px 2px 8px; }
+            .post-input input { font-size: 0.65rem; padding: 4px 2px; }
+            .post-input .avatar { width: 24px; height: 24px; }
+            .post-card { padding: 6px 8px; }
+            .post-header .avatar { width: 26px; height: 26px; }
+            .post-header .name { font-size: 0.7rem; }
+            .post-body { font-size: 0.7rem; }
+            .bottom-item .icon { font-size: 0.95rem; }
+            .bottom-item .label { font-size: 0.4rem; }
+            #pwa-install-banner { padding: 8px 10px; bottom: 55px; }
+            #pwa-install-banner .banner-icon { width: 32px; height: 32px; }
+            #pwa-install-banner .banner-text .title { font-size: 0.7rem; }
+            #pwa-install-banner .banner-text .subtitle { font-size: 0.55rem; }
+            #pwa-install-banner .btn-install { font-size: 0.55rem; padding: 4px 10px; }
+            .welcome h1 { font-size: 1.2rem; }
+            .profile-body .avatar { width: 55px; height: 55px; }
+            .profile-body h2 { font-size: 0.85rem; }
+            .tabs-header { gap: 2px; padding: 2px; }
+            .tab-btn { font-size: 0.45rem; padding: 4px 2px; }
+            .tab-btn i { font-size: 0.7rem; }
+            .slide-item { padding: 12px 10px; }
+            .slide-item .icon { font-size: 1.6rem; }
+            .slide-item h3 { font-size: 0.8rem; }
+            .slide-item p { font-size: 0.65rem; }
+            .btn-primary { font-size: 0.55rem; padding: 4px 10px; }
         }
     </style>
 </head>
@@ -1010,7 +850,7 @@
                     <i class="fas fa-bell"></i>
                     <span class="badge">3</span>
                 </button>
-                <button class="btn-primary" id="loginBtn" style="padding:4px 12px;font-size:0.65rem;">
+                <button class="btn-primary" id="loginBtn" style="padding:3px 10px;font-size:0.55rem;">
                     <i class="fas fa-user"></i> Ingia
                 </button>
             </div>
@@ -1022,12 +862,11 @@
     ============================================================ -->
     <main>
         
-        <!-- ========== HOME PAGE ========== -->
+        <!-- ========== HOME ========== -->
         <section id="homePage" class="page active">
-            
             <div class="welcome">
                 <h1><span class="green">Karibu</span> <span class="gold">KilimoSmart</span></h1>
-                <p><i class="fas fa-globe-africa"></i> Jukwaa la kisasa la wakulima wa kidunia</p>
+                <p><i class="fas fa-globe-africa"></i> Jukwaa la wakulima wa kidunia</p>
             </div>
             
             <!-- Stats -->
@@ -1064,19 +903,19 @@
                     <div class="slide-item">
                         <span class="icon"><i class="fas fa-robot" style="color:var(--gold-main);"></i></span>
                         <h3>Teknolojia ya Kilimo</h3>
-                        <p>Matumizi ya teknolojia ya kisasa kwa kilimo, ikiwemo sensorer.</p>
+                        <p>Matumizi ya teknolojia ya kisasa kwa kilimo.</p>
                         <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
                     </div>
                     <div class="slide-item">
                         <span class="icon"><i class="fas fa-hand-holding-usd" style="color:var(--green-lime);"></i></span>
                         <h3>Biashara ya Mazao</h3>
-                        <p>Jinsi ya kuuza mazao yako kwa bei nzuri na kuunda wateja.</p>
+                        <p>Jinsi ya kuuza mazao yako kwa bei nzuri.</p>
                         <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
                     </div>
                     <div class="slide-item">
                         <span class="icon"><i class="fas fa-cloud-sun-rain" style="color:var(--gold-main);"></i></span>
                         <h3>Hali ya Hewa</h3>
-                        <p>Taarifa za hali ya hewa kwa wakati ili kupanga shughuli zako.</p>
+                        <p>Taarifa za hali ya hewa kwa wakati.</p>
                         <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
                     </div>
                 </div>
@@ -1133,7 +972,7 @@
                             </div>
                         </div>
                         <div class="post-body">
-                            <i class="fas fa-seedling" style="color:var(--green-lime);"></i> Leo nimepanda mbegu mpya za mahindi zenye tija.
+                            <i class="fas fa-seedling" style="color:var(--green-lime);"></i> Leo nimepanda mbegu mpya za mahindi.
                         </div>
                         <div class="post-actions">
                             <button class="liked"><i class="fas fa-heart"></i> 24</button>
@@ -1151,7 +990,7 @@
                             </div>
                         </div>
                         <div class="post-body">
-                            <i class="fas fa-robot" style="color:var(--gold-main);"></i> Teknolojia mpya ya kumwagilia inapunguza matumizi ya maji kwa 40%.
+                            <i class="fas fa-robot" style="color:var(--gold-main);"></i> Teknolojia mpya ya kumwagilia.
                         </div>
                         <div class="post-actions">
                             <button><i class="far fa-heart"></i> 42</button>
@@ -1172,7 +1011,7 @@
                             </div>
                         </div>
                         <div class="post-body">
-                            <i class="fas fa-leaf" style="color:var(--green-lime);"></i> Mbolea mpya ya organic imewasili sokoni.
+                            <i class="fas fa-leaf" style="color:var(--green-lime);"></i> Mbolea mpya ya organic imewasili.
                         </div>
                         <div class="post-actions">
                             <button><i class="far fa-heart"></i> 18</button>
@@ -1184,26 +1023,22 @@
                 </div>
                 
                 <div class="tab-content" id="tab3">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-                        <div class="morph-card" style="text-align:center;padding:10px;">
-                            <i class="fas fa-trophy" style="font-size:1.8rem;color:var(--gold-main);"></i>
-                            <div style="font-weight:600;color:white;font-size:0.8rem;">Mkulima Bora</div>
-                            <div style="color:rgba(255,255,255,0.3);font-size:0.6rem;">Mwezi huu</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+                        <div class="morph-card" style="text-align:center;padding:8px;">
+                            <i class="fas fa-trophy" style="font-size:1.6rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.75rem;">Mkulima Bora</div>
                         </div>
-                        <div class="morph-card" style="text-align:center;padding:10px;">
-                            <i class="fas fa-award" style="font-size:1.8rem;color:var(--gold-main);"></i>
-                            <div style="font-weight:600;color:white;font-size:0.8rem;">Bidhaa Bora</div>
-                            <div style="color:rgba(255,255,255,0.3);font-size:0.6rem;">Mbolea Organic</div>
+                        <div class="morph-card" style="text-align:center;padding:8px;">
+                            <i class="fas fa-award" style="font-size:1.6rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.75rem;">Bidhaa Bora</div>
                         </div>
-                        <div class="morph-card" style="text-align:center;padding:10px;">
-                            <i class="fas fa-medal" style="font-size:1.8rem;color:var(--gold-main);"></i>
-                            <div style="font-weight:600;color:white;font-size:0.8rem;">Mafunzo Bora</div>
-                            <div style="color:rgba(255,255,255,0.3);font-size:0.6rem;">Kilimo Endelevu</div>
+                        <div class="morph-card" style="text-align:center;padding:8px;">
+                            <i class="fas fa-medal" style="font-size:1.6rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.75rem;">Mafunzo Bora</div>
                         </div>
-                        <div class="morph-card" style="text-align:center;padding:10px;">
-                            <i class="fas fa-crown" style="font-size:1.8rem;color:var(--gold-main);"></i>
-                            <div style="font-weight:600;color:white;font-size:0.8rem;">Mzalishaji Bora</div>
-                            <div style="color:rgba(255,255,255,0.3);font-size:0.6rem;">GreenFarm Ltd</div>
+                        <div class="morph-card" style="text-align:center;padding:8px;">
+                            <i class="fas fa-crown" style="font-size:1.6rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.75rem;">Mzalishaji Bora</div>
                         </div>
                     </div>
                 </div>
@@ -1212,10 +1047,10 @@
                     <div class="comm-card">
                         <span class="icon"><i class="fas fa-users" style="color:var(--green-lime);"></i></span>
                         <div>
-                            <div class="name">Wakulima wa Tanzania</div>
+                            <div class="name">Wakulima Tanzania</div>
                             <div class="members"><i class="fas fa-user-friends"></i> 2,340</div>
                         </div>
-                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                        <button class="btn-join">Jiunge</button>
                     </div>
                     <div class="comm-card">
                         <span class="icon"><i class="fas fa-robot" style="color:var(--gold-main);"></i></span>
@@ -1223,7 +1058,7 @@
                             <div class="name">Teknolojia ya Kilimo</div>
                             <div class="members"><i class="fas fa-user-friends"></i> 1,567</div>
                         </div>
-                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                        <button class="btn-join">Jiunge</button>
                     </div>
                     <div class="comm-card">
                         <span class="icon"><i class="fas fa-hand-holding-usd" style="color:var(--green-lime);"></i></span>
@@ -1231,7 +1066,7 @@
                             <div class="name">Biashara ya Mazao</div>
                             <div class="members"><i class="fas fa-user-friends"></i> 1,234</div>
                         </div>
-                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                        <button class="btn-join">Jiunge</button>
                     </div>
                 </div>
             </div>
@@ -1239,29 +1074,28 @@
             <!-- Create Post -->
             <div class="post-input">
                 <img src="images/default-avatar.png" alt="Avatar" class="avatar">
-                <input type="text" placeholder="Andika chapisho lako..." id="postInput">
-                <button class="btn-primary" id="postBtn" style="padding:4px 12px;font-size:0.65rem;">
+                <input type="text" placeholder="Andika chapisho..." id="postInput">
+                <button class="btn-primary" id="postBtn" style="padding:3px 10px;font-size:0.55rem;">
                     <i class="fas fa-pen"></i> Chapisha
                 </button>
             </div>
         </section>
         
-        <!-- ========== MARKETPLACE PAGE ========== -->
+        <!-- ========== MARKETPLACE ========== -->
         <section id="marketplacePage" class="page">
-            <h2 style="color:white;font-size:1.1rem;margin:8px 0;">
+            <h2 style="color:white;font-size:1rem;margin:6px 0;">
                 <i class="fas fa-store" style="color:var(--gold-main);"></i> Soko la Kilimo
             </h2>
             
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <select id="categoryFilter" style="flex:1;padding:6px 10px;border-radius:40px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:white;font-size:0.7rem;min-width:80px;">
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;">
+                <select id="categoryFilter" style="flex:1;padding:5px 8px;border-radius:40px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:white;font-size:0.65rem;min-width:70px;">
                     <option value="all" style="background:#0d4a0d;">Zote</option>
                     <option value="mbolea" style="background:#0d4a0d;">Mbolea</option>
                     <option value="mbegu" style="background:#0d4a0d;">Mbegu</option>
                     <option value="vifaa" style="background:#0d4a0d;">Vifaa</option>
                     <option value="nafaka" style="background:#0d4a0d;">Nafaka</option>
-                    <option value="dawa" style="background:#0d4a0d;">Dawa</option>
                 </select>
-                <input type="text" placeholder="Tafuta..." id="searchMarket" style="flex:2;padding:6px 12px;border-radius:40px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:white;font-size:0.7rem;min-width:100px;">
+                <input type="text" placeholder="Tafuta..." id="searchMarket" style="flex:2;padding:5px 10px;border-radius:40px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:white;font-size:0.65rem;min-width:80px;">
             </div>
             
             <div class="market-grid" id="marketplaceItems">
@@ -1308,18 +1142,18 @@
             </div>
         </section>
         
-        <!-- ========== EDUCATION PAGE ========== -->
+        <!-- ========== EDUCATION ========== -->
         <section id="educationPage" class="page">
-            <h2 style="color:white;font-size:1.1rem;margin:8px 0;">
+            <h2 style="color:white;font-size:1rem;margin:6px 0;">
                 <i class="fas fa-graduation-cap" style="color:var(--gold-main);"></i> Elimu ya Kilimo
             </h2>
             
-            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;">
-                <button class="edu-filter active" data-cat="all" style="padding:3px 12px;border-radius:30px;border:1px solid var(--gold-main);background:var(--gold-main);color:#0d4a0d;font-size:0.6rem;font-weight:600;cursor:pointer;">Zote</button>
-                <button class="edu-filter" data-cat="kilimo" style="padding:3px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.6rem;cursor:pointer;">Kilimo</button>
-                <button class="edu-filter" data-cat="ufugaji" style="padding:3px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.6rem;cursor:pointer;">Ufugaji</button>
-                <button class="edu-filter" data-cat="biashara" style="padding:3px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.6rem;cursor:pointer;">Biashara</button>
-                <button class="edu-filter" data-cat="teknolojia" style="padding:3px 12px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.6rem;cursor:pointer;">Teknolojia</button>
+            <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px;">
+                <button class="edu-filter active" data-cat="all" style="padding:2px 10px;border-radius:30px;border:1px solid var(--gold-main);background:var(--gold-main);color:#0d4a0d;font-size:0.55rem;font-weight:600;cursor:pointer;">Zote</button>
+                <button class="edu-filter" data-cat="kilimo" style="padding:2px 10px;border-radius:30px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.35);font-size:0.55rem;cursor:pointer;">Kilimo</button>
+                <button class="edu-filter" data-cat="ufugaji" style="padding:2px 10px;border-radius:30px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.35);font-size:0.55rem;cursor:pointer;">Ufugaji</button>
+                <button class="edu-filter" data-cat="biashara" style="padding:2px 10px;border-radius:30px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.35);font-size:0.55rem;cursor:pointer;">Biashara</button>
+                <button class="edu-filter" data-cat="teknolojia" style="padding:2px 10px;border-radius:30px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:rgba(255,255,255,0.35);font-size:0.55rem;cursor:pointer;">Teknolojia</button>
             </div>
             
             <div class="edu-grid" id="educationContent">
@@ -1370,7 +1204,7 @@
             </div>
         </section>
         
-        <!-- ========== PROFILE PAGE ========== -->
+        <!-- ========== PROFILE ========== -->
         <section id="profilePage" class="page">
             <div class="morph-card" style="padding:0;overflow:hidden;">
                 <div class="profile-cover">
@@ -1386,8 +1220,8 @@
                         <div><strong>45</strong> Chapisho</div>
                     </div>
                     <div class="btn-group">
-                        <button class="btn-primary" style="padding:4px 14px;font-size:0.65rem;"><i class="fas fa-user-edit"></i> Hariri</button>
-                        <button class="btn-outline" style="padding:4px 14px;font-size:0.65rem;background:transparent;border:1px solid var(--gold-main);color:var(--gold-main);border-radius:30px;cursor:pointer;"><i class="fas fa-cog"></i> Mipangilio</button>
+                        <button class="btn-primary" style="padding:3px 12px;font-size:0.6rem;"><i class="fas fa-user-edit"></i> Hariri</button>
+                        <button style="padding:3px 12px;font-size:0.6rem;background:transparent;border:1px solid var(--gold-main);color:var(--gold-main);border-radius:30px;cursor:pointer;"><i class="fas fa-cog"></i> Mipangilio</button>
                     </div>
                 </div>
             </div>
@@ -1418,16 +1252,16 @@
                 </div>
             </div>
             <div id="prof-products" class="prof-content">
-                <div class="morph-card text-center" style="padding:24px;">
-                    <i class="fas fa-box-open" style="font-size:2.5rem;color:rgba(255,255,255,0.1);"></i>
-                    <p style="color:rgba(255,255,255,0.3);font-size:0.8rem;margin-top:6px;">Hakuna bidhaa bado</p>
-                    <button class="btn-outline" style="font-size:0.65rem;margin-top:6px;background:transparent;border:1px solid var(--gold-main);color:var(--gold-main);border-radius:30px;padding:4px 14px;cursor:pointer;"><i class="fas fa-plus"></i> Ongeza</button>
+                <div class="morph-card text-center" style="padding:20px;">
+                    <i class="fas fa-box-open" style="font-size:2rem;color:rgba(255,255,255,0.08);"></i>
+                    <p style="color:rgba(255,255,255,0.25);font-size:0.75rem;margin-top:4px;">Hakuna bidhaa bado</p>
+                    <button style="margin-top:4px;padding:3px 12px;border-radius:30px;background:transparent;border:1px solid var(--gold-main);color:var(--gold-main);font-size:0.6rem;cursor:pointer;"><i class="fas fa-plus"></i> Ongeza</button>
                 </div>
             </div>
             <div id="prof-saved" class="prof-content">
-                <div class="morph-card text-center" style="padding:24px;">
-                    <i class="fas fa-bookmark" style="font-size:2.5rem;color:rgba(255,255,255,0.1);"></i>
-                    <p style="color:rgba(255,255,255,0.3);font-size:0.8rem;margin-top:6px;">Hakuna zilizohifadhiwa</p>
+                <div class="morph-card text-center" style="padding:20px;">
+                    <i class="fas fa-bookmark" style="font-size:2rem;color:rgba(255,255,255,0.08);"></i>
+                    <p style="color:rgba(255,255,255,0.25);font-size:0.75rem;margin-top:4px;">Hakuna zilizohifadhiwa</p>
                 </div>
             </div>
         </section>
@@ -1457,10 +1291,9 @@
     </nav>
 
     <!-- ============================================================
-    PWA INSTALL BANNER - KAMA CITY FIND
+    PWA INSTALL BANNER
     ============================================================ -->
-    <!-- Banner ya Install (Inaonekana kama app haijasakinishwa) -->
-    <div id="pwa-install-banner" style="display:none;">
+    <div id="pwa-install-banner">
         <img src="https://files.catbox.moe/1vtx3c.jpg" alt="Kilimo Smart" class="banner-icon">
         <div class="banner-text">
             <div class="title"><i class="fas fa-download" style="color:var(--gold-main);"></i> Sakinisha Kilimo Smart</div>
@@ -1472,38 +1305,28 @@
         </div>
     </div>
 
-    <!-- Banner ya "Already Installed" - Kama City Find -->
-    <div id="pwa-installed-state">
-        <div class="state-icon"><i class="fas fa-check-circle"></i></div>
-        <div class="state-text">
-            <div class="title">App tayari imesakinishwa</div>
-            <div class="subtitle">Bonyeza kufungua app</div>
-        </div>
-        <button class="btn-open" id="pwaOpenBtn"><i class="fas fa-external-link-alt"></i> Fungua</button>
-    </div>
-
     <!-- ============================================================
     MODALS
     ============================================================ -->
     <div id="postModal" class="modal">
         <div class="modal-content">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
                 <h3><i class="fas fa-pen" style="color:var(--gold-main);"></i> Chapisha</h3>
                 <button class="close" id="closePostModal">&times;</button>
             </div>
-            <textarea id="postTextarea" placeholder="Ni nini kipya?..." style="min-height:80px;resize:vertical;"></textarea>
-            <div style="display:flex;gap:4px;margin:6px 0;">
-                <button style="flex:1;padding:4px;border-radius:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.65rem;"><i class="fas fa-image"></i> Picha</button>
-                <button style="flex:1;padding:4px;border-radius:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.65rem;"><i class="fas fa-video"></i> Video</button>
-                <button style="flex:1;padding:4px;border-radius:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.65rem;"><i class="fas fa-map-marker-alt"></i> Eneo</button>
+            <textarea id="postTextarea" placeholder="Ni nini kipya?..." style="min-height:70px;resize:vertical;"></textarea>
+            <div style="display:flex;gap:4px;margin:4px 0;">
+                <button style="flex:1;padding:3px;border-radius:30px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);cursor:pointer;font-size:0.6rem;"><i class="fas fa-image"></i> Picha</button>
+                <button style="flex:1;padding:3px;border-radius:30px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);cursor:pointer;font-size:0.6rem;"><i class="fas fa-video"></i> Video</button>
+                <button style="flex:1;padding:3px;border-radius:30px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);color:rgba(255,255,255,0.25);cursor:pointer;font-size:0.6rem;"><i class="fas fa-map-marker-alt"></i> Eneo</button>
             </div>
-            <button id="submitPostBtn" class="btn-primary" style="width:100%;padding:8px;border-radius:30px;font-size:0.8rem;">Chapisha</button>
+            <button id="submitPostBtn" class="btn-primary" style="width:100%;padding:6px;border-radius:30px;font-size:0.75rem;">Chapisha</button>
         </div>
     </div>
 
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
                 <h3><i class="fas fa-sign-in-alt" style="color:var(--gold-main);"></i> Ingia</h3>
                 <button class="close" id="closeLoginModal">&times;</button>
             </div>
@@ -1521,8 +1344,8 @@
                     <option value="business">Biashara</option>
                     <option value="brand">Brand</option>
                 </select>
-                <button type="submit" class="btn-primary" style="width:100%;padding:8px;border-radius:30px;margin:4px 0;">Ingia</button>
-                <p style="color:rgba(255,255,255,0.3);font-size:0.7rem;text-align:center;">
+                <button type="submit" class="btn-primary" style="width:100%;padding:6px;border-radius:30px;margin:3px 0;">Ingia</button>
+                <p style="color:rgba(255,255,255,0.25);font-size:0.65rem;text-align:center;">
                     Huna akaunti? <a href="#" id="switchToRegister" style="color:var(--gold-main);">Jisajili</a>
                 </p>
             </form>
@@ -1612,8 +1435,8 @@
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('.edu-filter').forEach(function(b) {
                         b.style.background = 'transparent';
-                        b.style.color = 'rgba(255,255,255,0.4)';
-                        b.style.borderColor = 'rgba(255,255,255,0.1)';
+                        b.style.color = 'rgba(255,255,255,0.35)';
+                        b.style.borderColor = 'rgba(255,255,255,0.08)';
                     });
                     this.style.background = '#d4af37';
                     this.style.color = '#0d4a0d';
@@ -1759,16 +1582,16 @@
                 var toast = document.createElement('div');
                 toast.style.cssText = [
                     'position:fixed',
-                    'bottom:100px',
+                    'bottom:85px',
                     'left:50%',
                     'transform:translateX(-50%)',
                     'background:rgba(13,74,13,0.95)',
                     'backdrop-filter:blur(20px)',
-                    'border:1px solid rgba(255,255,255,0.06)',
-                    'border-radius:16px',
-                    'padding:10px 20px',
+                    'border:1px solid rgba(255,255,255,0.05)',
+                    'border-radius:14px',
+                    'padding:8px 18px',
                     'color:white',
-                    'font-size:0.8rem',
+                    'font-size:0.75rem',
                     'z-index:3000',
                     'box-shadow:0 8px 30px rgba(0,0,0,0.4)',
                     'border-left:4px solid ' + (colors[type] || colors.info),
@@ -1829,42 +1652,38 @@
             });
             
             // ==========================================================
-            // PWA INSTALL - KAMA CITY FIND
+            // PWA INSTALL - APP HALISI
             // ==========================================================
             const installBanner = document.getElementById('pwa-install-banner');
-            const installedState = document.getElementById('pwa-installed-state');
             const installBtn = document.getElementById('pwaInstallBtn');
             const dismissBtn = document.getElementById('pwaDismissBtn');
-            const openBtn = document.getElementById('pwaOpenBtn');
             let deferredPrompt = null;
             
-            // Check if app is installed (standalone mode)
+            // Check if app is already installed
             function isAppInstalled() {
                 if (window.navigator.standalone === true) return true;
                 if (window.matchMedia('(display-mode: standalone)').matches) return true;
                 return false;
             }
             
-            // Check if user dismissed banner before
+            // Check if banner was dismissed
             function isBannerDismissed() {
                 return localStorage.getItem('pwa_banner_dismissed') === 'true';
             }
             
-            // Show appropriate banner
+            // Show/hide banner
             function updateBannerState() {
                 if (isAppInstalled()) {
                     installBanner.style.display = 'none';
-                    installedState.style.display = 'flex';
-                } else if (isBannerDismissed()) {
-                    installBanner.style.display = 'none';
-                    installedState.style.display = 'none';
-                } else {
-                    installBanner.style.display = 'flex';
-                    installedState.style.display = 'none';
+                    return;
                 }
+                if (isBannerDismissed()) {
+                    installBanner.style.display = 'none';
+                    return;
+                }
+                installBanner.style.display = 'flex';
             }
             
-            // Initial state
             updateBannerState();
             
             // Before install prompt
@@ -1873,7 +1692,6 @@
                 deferredPrompt = e;
                 if (!isAppInstalled() && !isBannerDismissed()) {
                     installBanner.style.display = 'flex';
-                    installedState.style.display = 'none';
                 }
             });
             
@@ -1892,7 +1710,7 @@
                         deferredPrompt = null;
                     });
                 } else {
-                    // Fallback: Show Android/iOS install instructions
+                    // Fallback: Show install instructions
                     showInstallInstructions();
                 }
             });
@@ -1904,16 +1722,10 @@
                 showToast('Banner imefungwa. Bonyeza menyu ya browser kusakinisha.', 'info');
             });
             
-            // Open button (for installed state)
-            openBtn.addEventListener('click', function() {
-                window.location.href = '/';
-            });
-            
             // App installed event
             window.addEventListener('appinstalled', function() {
                 showToast('🎉 Kilimo Smart imesakinishwa!', 'success');
                 installBanner.style.display = 'none';
-                installedState.style.display = 'flex';
                 localStorage.setItem('pwa_banner_dismissed', 'true');
             });
             
@@ -1926,9 +1738,9 @@
                 
                 if (isIOS) {
                     instructions = `
-                        <div style="text-align:left;font-size:0.75rem;color:rgba(255,255,255,0.7);">
-                            <p style="margin:4px 0;">📱 <strong>iPhone/iPad:</strong></p>
-                            <ol style="padding-left:18px;margin:4px 0;">
+                        <div style="text-align:left;font-size:0.7rem;color:rgba(255,255,255,0.6);">
+                            <p style="margin:3px 0;">📱 <strong>iPhone/iPad:</strong></p>
+                            <ol style="padding-left:16px;margin:3px 0;">
                                 <li>Bonyeza <strong>📤 Share</strong> chini</li>
                                 <li>Chagua <strong>"Add to Home Screen"</strong></li>
                                 <li>Bonyeza <strong>"Add"</strong></li>
@@ -1937,9 +1749,9 @@
                     `;
                 } else if (isAndroid) {
                     instructions = `
-                        <div style="text-align:left;font-size:0.75rem;color:rgba(255,255,255,0.7);">
-                            <p style="margin:4px 0;">📱 <strong>Android:</strong></p>
-                            <ol style="padding-left:18px;margin:4px 0;">
+                        <div style="text-align:left;font-size:0.7rem;color:rgba(255,255,255,0.6);">
+                            <p style="margin:3px 0;">📱 <strong>Android:</strong></p>
+                            <ol style="padding-left:16px;margin:3px 0;">
                                 <li>Bonyeza <strong>⋮</strong> (Menu) kwenye browser</li>
                                 <li>Chagua <strong>"Add to Home screen"</strong></li>
                                 <li>Bonyeza <strong>"Add"</strong></li>
@@ -1948,9 +1760,9 @@
                     `;
                 } else {
                     instructions = `
-                        <div style="text-align:left;font-size:0.75rem;color:rgba(255,255,255,0.7);">
-                            <p style="margin:4px 0;">💻 <strong>Kwa Kompyuta:</strong></p>
-                            <ol style="padding-left:18px;margin:4px 0;">
+                        <div style="text-align:left;font-size:0.7rem;color:rgba(255,255,255,0.6);">
+                            <p style="margin:3px 0;">💻 <strong>Kwa Kompyuta:</strong></p>
+                            <ol style="padding-left:16px;margin:3px 0;">
                                 <li>Bonyeza <strong>🔒</strong> kwenye address bar</li>
                                 <li>Chagua <strong>"Install App"</strong></li>
                             </ol>
@@ -1975,27 +1787,27 @@
                 modal.innerHTML = `
                     <div style="
                         background: rgba(13,74,13,0.95);
-                        border-radius: 20px;
-                        padding: 20px;
-                        max-width: 360px;
+                        border-radius: 18px;
+                        padding: 18px;
+                        max-width: 340px;
                         width: 92%;
-                        border: 1px solid rgba(255,255,255,0.06);
+                        border: 1px solid rgba(255,255,255,0.05);
                     ">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                            <h3 style="color:white;font-size:1rem;"><i class="fas fa-download" style="color:var(--gold-main);"></i> Sakinisha App</h3>
-                            <button id="pwaInstructionClose" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:1.3rem;cursor:pointer;">✕</button>
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <h3 style="color:white;font-size:0.95rem;"><i class="fas fa-download" style="color:var(--gold-main);"></i> Sakinisha App</h3>
+                            <button id="pwaInstructionClose" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:1.2rem;cursor:pointer;">✕</button>
                         </div>
                         ${instructions}
                         <button id="pwaInstructionGotIt" style="
                             width:100%;
-                            margin-top:10px;
-                            padding:8px;
+                            margin-top:8px;
+                            padding:6px;
                             border-radius:30px;
                             border:none;
                             background: linear-gradient(135deg, #d4af37, #b8860b);
                             color: white;
                             font-weight:600;
-                            font-size:0.8rem;
+                            font-size:0.75rem;
                             cursor:pointer;
                         ">Naelewa</button>
                     </div>
@@ -2015,7 +1827,7 @@
             // ==========================================================
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/sw.js')
-                    .then(function() {
+                    .then(function(reg) {
                         console.log('✅ Service Worker registered');
                     })
                     .catch(function(err) {
@@ -2025,7 +1837,6 @@
             
             console.log('🌾 Kilimo Smart loaded!');
             console.log('📱 Built with ❤️ for Tanzanian farmers');
-            console.log('💡 To install: Click "Sakinisha" button below');
         });
     </script>
 </body>
