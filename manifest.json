@@ -61,6 +61,15 @@
       "purpose": "any maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "images/screenshot1.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
   "shortcuts": [
     {
       "name": "Soko",
@@ -75,22 +84,6 @@
       "description": "Chapisha chapisho jipya",
       "url": "/index.html?action=post",
       "icons": [{ "src": "images/icon-96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Elimu",
-      "short_name": "Elimu",
-      "description": "Nenda kwenye elimu",
-      "url": "/index.html?page=education",
-      "icons": [{ "src": "images/icon-96.png", "sizes": "96x96" }]
     }
-  ],
-  "screenshots": [
-    {
-      "src": "images/screenshot1.png",
-      "sizes": "1080x1920",
-      "type": "image/png"
-    }
-  ],
-  "prefer_related_applications": false,
-  "related_applications": []
+  ]
 }
