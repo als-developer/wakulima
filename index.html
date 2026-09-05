@@ -2,228 +2,1870 @@
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#1a5c1a">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0d4a0d">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <base href="/"> <!-- ADDED for Heroku routing -->
+    <base href="/">
     <title>Kilimo Smart - Jukwaa la Wakulima</title>
+    
+    <!-- Font Awesome 6 (Free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dark-mode.css">
-    <link rel="stylesheet" href="css/animations.css">
     <link rel="apple-touch-icon" href="images/icon-192.png">
+    
+    <style>
+        /* ============================================================
+           ROOT VARIABLES & RESET
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --green-deep: #0d4a0d;
+            --green-mid: #1a6b1a;
+            --green-light: #2d8a2d;
+            --green-lime: #7dce82;
+            --gold-main: #d4af37;
+            --gold-light: #f0d060;
+            --gold-glow: rgba(212, 175, 55, 0.4);
+            --morph-bg: rgba(255, 255, 255, 0.06);
+            --morph-border: rgba(255, 255, 255, 0.08);
+            --morph-shadow-dark: rgba(0, 0, 0, 0.3);
+            --morph-shadow-light: rgba(255, 255, 255, 0.08);
+            --morph-blur: 20px;
+            --radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(ellipse at top, #0d4a0d, #061f06);
+            color: white;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            padding-top: 72px;
+            overflow-x: hidden;
+        }
+        
+        /* ============================================================
+           SCROLLBAR
+           ============================================================ */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--gold-main), var(--gold-light)); border-radius: 10px; }
+        
+        /* ============================================================
+           FLOATING BUBBLES
+           ============================================================ */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.08;
+            z-index: 0;
+            animation: floatBubble 25s infinite ease-in-out;
+        }
+        .bubble-1 { width: 350px; height: 350px; top: -120px; right: -120px; background: radial-gradient(circle, var(--green-lime), transparent 70%); }
+        .bubble-2 { width: 450px; height: 450px; bottom: -250px; left: -250px; background: radial-gradient(circle, var(--gold-main), transparent 70%); animation-delay: -8s; }
+        .bubble-3 { width: 200px; height: 200px; top: 40%; left: 10%; background: radial-gradient(circle, var(--green-mid), transparent 70%); animation-delay: -15s; opacity: 0.05; }
+        .bubble-4 { width: 150px; height: 150px; bottom: 30%; right: 5%; background: radial-gradient(circle, var(--gold-light), transparent 70%); animation-delay: -20s; opacity: 0.06; }
+        
+        @keyframes floatBubble {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(50px, -20px) scale(1.05); }
+        }
+        
+        /* ============================================================
+           MORPHISM CARDS
+           ============================================================ */
+        .morph-card {
+            background: var(--morph-bg);
+            backdrop-filter: blur(var(--morph-blur));
+            -webkit-backdrop-filter: blur(var(--morph-blur));
+            border-radius: var(--radius);
+            border: 1px solid var(--morph-border);
+            box-shadow: 
+                6px 6px 16px var(--morph-shadow-dark),
+                -6px -6px 16px var(--morph-shadow-light),
+                inset 0 0 30px rgba(46,204,113,0.05);
+            transition: var(--transition);
+            padding: 18px;
+            margin: 10px 0;
+        }
+        
+        .morph-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                10px 10px 24px var(--morph-shadow-dark),
+                -10px -10px 24px var(--morph-shadow-light),
+                0 0 40px rgba(46,204,113,0.1);
+        }
+        
+        .morph-card:active { transform: scale(0.98); }
+        
+        /* ============================================================
+           GLASS NAVIGATION
+           ============================================================ */
+        .glass-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(13, 74, 13, 0.88);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            padding: 8px 16px;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* ===== LOGO ===== */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 4px 14px 4px 6px;
+            border-radius: 60px;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.06);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        .logo-wrapper:hover {
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px rgba(46,204,113,0.15);
+        }
+        .logo-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold-main);
+            box-shadow: 0 0 20px var(--gold-glow);
+            transition: var(--transition);
+        }
+        .logo-img:hover {
+            transform: rotate(8deg) scale(1.05);
+            box-shadow: 0 0 40px var(--gold-glow);
+        }
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .logo-text .green { color: var(--green-lime); }
+        .logo-text .gold { color: var(--gold-main); }
+        
+        /* ===== DESKTOP NAV ===== */
+        .nav-menu {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .nav-link {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            transition: var(--transition);
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-link:hover {
+            color: white;
+            background: rgba(255,255,255,0.08);
+        }
+        .nav-link.active {
+            color: var(--gold-main);
+            background: rgba(212,175,55,0.15);
+        }
+        .nav-link i { font-size: 0.9rem; }
+        
+        /* ===== NAV ACTIONS ===== */
+        .nav-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .nav-btn {
+            background: rgba(255,255,255,0.06);
+            border: none;
+            color: white;
+            padding: 8px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            position: relative;
+        }
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.15);
+            transform: scale(1.05);
+        }
+        .nav-btn .badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 6px;
+            font-size: 0.55rem;
+            font-weight: 700;
+        }
+        
+        /* ============================================================
+           BOTTOM NAVIGATION
+           ============================================================ */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(13, 74, 13, 0.92);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: space-around;
+            padding: 4px 0 8px;
+        }
+        
+        .bottom-item {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            padding: 4px 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            flex: 1;
+        }
+        .bottom-item .icon {
+            font-size: 1.3rem;
+            transition: var(--transition);
+        }
+        .bottom-item .label {
+            font-size: 0.55rem;
+            transition: var(--transition);
+        }
+        .bottom-item.active {
+            color: var(--gold-main);
+        }
+        .bottom-item.active .icon {
+            transform: translateY(-3px);
+        }
+        .bottom-item.active .label {
+            color: var(--gold-main);
+            font-weight: 600;
+        }
+        .bottom-item.active::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-light), var(--gold-main));
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+        
+        /* ============================================================
+           PAGES
+           ============================================================ */
+        .page {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 14px;
+            animation: fadeUp 0.4s ease;
+        }
+        .page.active { display: block; }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ============================================================
+           STATS
+           ============================================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 10px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        .stat-card .icon { font-size: 1.4rem; color: var(--gold-main); }
+        .stat-card .number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .label { color: rgba(255,255,255,0.5); font-size: 0.65rem; margin-top: 2px; }
+        .stat-card .change { font-size: 0.6rem; color: var(--green-lime); }
+        
+        /* ============================================================
+           SLIDES
+           ============================================================ */
+        .slides-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            margin: 10px 0;
+        }
+        .slides-wrapper {
+            display: flex;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .slide-item {
+            min-width: 100%;
+            padding: 24px 20px;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius);
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .slide-item .icon { font-size: 2.8rem; display: block; margin-bottom: 6px; }
+        .slide-item h3 { font-size: 1.1rem; margin-bottom: 4px; color: white; }
+        .slide-item p { color: rgba(255,255,255,0.5); font-size: 0.85rem; line-height: 1.5; }
+        .slide-item .btn-slide {
+            margin-top: 10px;
+            padding: 4px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--gold-main);
+            background: transparent;
+            color: var(--gold-main);
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .slide-item .btn-slide:hover {
+            background: var(--gold-main);
+            color: #0d4a0d;
+        }
+        
+        .slide-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 0 4px;
+        }
+        .slide-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 0;
+        }
+        .slide-dot.active {
+            background: var(--gold-main);
+            box-shadow: 0 0 20px var(--gold-glow);
+            width: 28px;
+            border-radius: 10px;
+        }
+        
+        /* ============================================================
+           4 TABS
+           ============================================================ */
+        .tabs-container { margin: 10px 0; }
+        .tabs-header {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            background: rgba(255,255,255,0.03);
+            padding: 4px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .tab-btn {
+            padding: 8px 4px;
+            border: none;
+            background: transparent;
+            color: rgba(255,255,255,0.4);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.65rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        .tab-btn i { font-size: 1rem; }
+        .tab-btn.active {
+            background: rgba(212,175,55,0.15);
+            color: var(--gold-main);
+            box-shadow: 0 4px 15px rgba(212,175,55,0.1);
+        }
+        .tab-btn:hover:not(.active) {
+            background: rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.7);
+        }
+        .tab-content {
+            display: none;
+            padding: 10px 0;
+            animation: fadeUp 0.3s ease;
+        }
+        .tab-content.active { display: block; }
+        
+        /* ============================================================
+           POSTS
+           ============================================================ */
+        .post-input {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 4px 8px 4px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15);
+            margin: 10px 0;
+        }
+        .post-input input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 10px 6px;
+            font-size: 0.85rem;
+            color: white;
+            outline: none;
+        }
+        .post-input input::placeholder { color: rgba(255,255,255,0.3); }
+        .post-input .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-main);
+            object-fit: cover;
+        }
+        
+        .post-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 14px 16px;
+            margin: 8px 0;
+            transition: var(--transition);
+        }
+        .post-card:hover { border-color: rgba(212,175,55,0.2); }
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .post-header .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-main);
+            object-fit: cover;
+        }
+        .post-header .name { font-weight: 600; color: white; font-size: 0.9rem; }
+        .post-header .time { color: rgba(255,255,255,0.3); font-size: 0.65rem; }
+        .post-body { color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.6; margin: 8px 0; }
+        .post-actions {
+            display: flex;
+            gap: 16px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .post-actions button {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.35);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+        .post-actions button:hover { color: rgba(255,255,255,0.7); }
+        .post-actions button.liked { color: #ff6b6b; }
+        
+        /* ============================================================
+           MARKETPLACE
+           ============================================================ */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+            gap: 10px;
+        }
+        .product-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: var(--transition);
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+        .product-card .img {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.6rem;
+            background: linear-gradient(135deg, rgba(46,204,113,0.08), rgba(13,74,13,0.12));
+        }
+        .product-card .info { padding: 10px 12px; }
+        .product-card .title { font-weight: 600; font-size: 0.85rem; color: white; }
+        .product-card .price { color: var(--gold-main); font-weight: 700; font-size: 0.9rem; }
+        .product-card .seller { color: rgba(255,255,255,0.3); font-size: 0.65rem; }
+        .product-card .rating { color: var(--gold-main); font-size: 0.65rem; }
+        .product-card .btn-buy {
+            width: 100%;
+            padding: 4px;
+            border-radius: 20px;
+            border: none;
+            background: linear-gradient(135deg, var(--gold-main), #b8860b);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 6px;
+        }
+        .product-card .btn-buy:hover { transform: scale(1.02); }
+        
+        /* ============================================================
+           EDUCATION
+           ============================================================ */
+        .edu-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .edu-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: var(--transition);
+        }
+        .edu-card:hover {
+            border-color: rgba(212,175,55,0.2);
+            transform: translateX(4px);
+        }
+        .edu-card .icon { font-size: 1.8rem; }
+        .edu-card h4 { color: white; font-size: 0.9rem; margin: 2px 0; }
+        .edu-card .cat { color: var(--gold-main); font-size: 0.65rem; font-weight: 600; }
+        .edu-card p { color: rgba(255,255,255,0.45); font-size: 0.8rem; }
+        .edu-card .meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.25);
+            margin-top: 4px;
+        }
+        
+        /* ============================================================
+           COMMUNITY
+           ============================================================ */
+        .comm-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            margin: 6px 0;
+        }
+        .comm-card:hover { border-color: rgba(212,175,55,0.2); }
+        .comm-card .icon { font-size: 1.8rem; }
+        .comm-card .name { color: white; font-weight: 600; font-size: 0.85rem; }
+        .comm-card .members { color: rgba(255,255,255,0.35); font-size: 0.7rem; }
+        .comm-card .btn-join {
+            margin-left: auto;
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--gold-main);
+            background: transparent;
+            color: var(--gold-main);
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .comm-card .btn-join:hover {
+            background: var(--gold-main);
+            color: #0d4a0d;
+        }
+        
+        /* ============================================================
+           PROFILE
+           ============================================================ */
+        .profile-cover {
+            height: 130px;
+            background: linear-gradient(135deg, var(--green-deep), var(--gold-main));
+            border-radius: var(--radius) var(--radius) 0 0;
+            position: relative;
+        }
+        .profile-cover .btn-cover {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        .profile-body {
+            text-align: center;
+            padding: 16px;
+            margin-top: -55px;
+        }
+        .profile-body .avatar {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 4px solid var(--gold-main);
+            box-shadow: 0 0 30px var(--gold-glow);
+            object-fit: cover;
+        }
+        .profile-body h2 { color: white; font-size: 1.1rem; margin: 6px 0 2px; }
+        .profile-body .bio { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+        .profile-body .stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 10px 0;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+        }
+        .profile-body .stats strong {
+            display: block;
+            font-size: 1.1rem;
+            color: var(--gold-main);
+        }
+        .profile-body .btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* ============================================================
+           PROFILE TABS
+           ============================================================ */
+        .prof-tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .prof-tab {
+            padding: 8px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.4);
+            font-weight: 600;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .prof-tab.active {
+            background: rgba(212,175,55,0.15);
+            color: var(--gold-main);
+        }
+        .prof-tab i { margin-right: 4px; }
+        .prof-content { display: none; animation: fadeUp 0.3s ease; }
+        .prof-content.active { display: block; }
+        
+        /* ============================================================
+           BUTTONS
+           ============================================================ */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-main), #b8860b);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px var(--gold-glow);
+        }
+        .btn-primary:active { transform: scale(0.96); }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold-main);
+            color: var(--gold-main);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-outline:hover {
+            background: var(--gold-main);
+            color: #0d4a0d;
+        }
+        
+        /* ============================================================
+           MODALS
+           ============================================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: rgba(13,74,13,0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 24px;
+            max-width: 480px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeUp 0.3s ease;
+        }
+        .modal-content .close {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modal-content .close:hover { color: white; }
+        .modal-content h3 { color: white; font-size: 1.1rem; margin-bottom: 12px; }
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: white;
+            margin: 4px 0;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+        .modal-content input:focus,
+        .modal-content select:focus,
+        .modal-content textarea:focus {
+            outline: none;
+            border-color: var(--gold-main);
+        }
+        .modal-content input::placeholder,
+        .modal-content textarea::placeholder { color: rgba(255,255,255,0.25); }
+        .modal-content select option { background: #0d4a0d; }
+        .modal-content .input-icon {
+            position: relative;
+        }
+        .modal-content .input-icon i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.2);
+        }
+        .modal-content .input-icon input {
+            padding-left: 40px;
+        }
+        
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .nav-actions .hide-mobile { display: none; }
+            .logo-text { font-size: 1rem; }
+            .logo-img { width: 32px; height: 32px; }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+            .stat-card .number { font-size: 1.2rem; }
+            .stat-card { padding: 10px 6px; }
+            .market-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .tabs-header { grid-template-columns: repeat(4, 1fr); }
+            .tab-btn { font-size: 0.55rem; padding: 6px 2px; }
+            .tab-btn i { font-size: 0.85rem; }
+            .slide-item { padding: 16px; }
+            .slide-item .icon { font-size: 2rem; }
+            .slide-item h3 { font-size: 0.95rem; }
+            .slide-item p { font-size: 0.75rem; }
+            .profile-body .avatar { width: 70px; height: 70px; }
+            .profile-body h2 { font-size: 0.95rem; }
+            .prof-tabs { grid-template-columns: repeat(3, 1fr); }
+            .modal-content { padding: 18px; }
+        }
+        
+        @media (max-width: 480px) {
+            .logo-text { font-size: 0.85rem; }
+            .logo-img { width: 28px; height: 28px; }
+            .logo-wrapper { padding: 2px 10px 2px 4px; }
+            .stat-card .number { font-size: 1rem; }
+            .stat-card .icon { font-size: 1.1rem; }
+            .market-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .product-card .img { height: 70px; font-size: 2rem; }
+            .product-card .info { padding: 6px 8px; }
+            .product-card .title { font-size: 0.7rem; }
+            .product-card .price { font-size: 0.75rem; }
+            .post-input { padding: 2px 6px 2px 12px; }
+            .post-input input { font-size: 0.75rem; padding: 6px 4px; }
+            .post-input .avatar { width: 30px; height: 30px; }
+            .post-card { padding: 10px 12px; }
+            .post-header .avatar { width: 32px; height: 32px; }
+            .post-header .name { font-size: 0.8rem; }
+            .post-body { font-size: 0.8rem; }
+            .bottom-item .icon { font-size: 1.1rem; }
+            .bottom-item .label { font-size: 0.5rem; }
+            .slide-item { padding: 12px; }
+            .slide-item .icon { font-size: 1.6rem; }
+            .slide-item h3 { font-size: 0.85rem; }
+            .slide-item p { font-size: 0.7rem; }
+            .tabs-header { gap: 2px; padding: 2px; }
+            .tab-btn { font-size: 0.5rem; padding: 4px 2px; }
+            .tab-btn i { font-size: 0.7rem; }
+            .profile-body .avatar { width: 60px; height: 60px; }
+            .profile-body .stats { gap: 12px; font-size: 0.65rem; }
+            .profile-body .stats strong { font-size: 0.9rem; }
+            .btn-primary { font-size: 0.7rem; padding: 6px 14px; }
+            .btn-outline { font-size: 0.65rem; padding: 4px 12px; }
+            .modal-content { padding: 14px; }
+            .modal-content h3 { font-size: 0.95rem; }
+            .modal-content input,
+            .modal-content select,
+            .modal-content textarea { font-size: 0.75rem; padding: 8px 12px; }
+            .comm-card { padding: 8px 12px; }
+            .comm-card .icon { font-size: 1.4rem; }
+            .comm-card .name { font-size: 0.75rem; }
+            .edu-card { padding: 10px 12px; }
+            .edu-card .icon { font-size: 1.4rem; }
+            .edu-card h4 { font-size: 0.8rem; }
+        }
+        
+        @media (max-width: 380px) {
+            .market-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; }
+            .stat-card { padding: 6px 4px; }
+            .stat-card .number { font-size: 0.9rem; }
+            .stat-card .icon { font-size: 0.9rem; }
+            .stat-card .label { font-size: 0.5rem; }
+        }
+        
+        /* ============================================================
+           WEATHER WIDGET
+           ============================================================ */
+        .weather-widget {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .weather-widget .left { display: flex; align-items: center; gap: 12px; }
+        .weather-widget .left .icon { font-size: 2.2rem; color: var(--gold-main); }
+        .weather-widget .left .temp { font-size: 1.3rem; font-weight: 700; color: white; }
+        .weather-widget .left .cond { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+        .weather-widget .right { display: flex; gap: 14px; color: rgba(255,255,255,0.35); font-size: 0.75rem; }
+        .weather-widget .right i { margin-right: 2px; }
+        .weather-widget .updated { font-size: 0.6rem; color: rgba(255,255,255,0.2); }
+        
+        /* ============================================================
+           WELCOME
+           ============================================================ */
+        .welcome {
+            text-align: center;
+            padding: 10px 0 6px;
+        }
+        .welcome h1 {
+            font-size: 1.8rem;
+            margin-bottom: 2px;
+        }
+        .welcome h1 .green {
+            background: linear-gradient(135deg, var(--green-lime), var(--green-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .welcome h1 .gold {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-main));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .welcome p {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.85rem;
+        }
+        .welcome p i { color: var(--gold-main); }
+        
+        /* ============================================================
+           UTILITIES
+           ============================================================ */
+        .mt-8 { margin-top: 8px; }
+        .mb-8 { margin-bottom: 8px; }
+        .gap-8 { gap: 8px; }
+        .flex { display: flex; }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+        .text-center { text-align: center; }
+        .text-gold { color: var(--gold-main); }
+        .text-muted { color: rgba(255,255,255,0.3); }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
+
+    <!-- ============================================================
+    FLOATING BUBBLES
+    ============================================================ -->
+    <div class="bubble bubble-1"></div>
+    <div class="bubble bubble-2"></div>
+    <div class="bubble bubble-3"></div>
+    <div class="bubble bubble-4"></div>
+
+    <!-- ============================================================
+    NAVIGATION
+    ============================================================ -->
+    <nav class="glass-nav">
         <div class="nav-container">
-            <div class="logo">
-                <img src="images/logo.png" alt="Kilimo Smart" height="40">
-                <span class="logo-text">Kilimo<span class="gold">Smart</span></span>
+            <!-- Logo -->
+            <div class="logo-wrapper">
+                <img src="https://files.catbox.moe/1vtx3c.jpg" alt="Kilimo Smart" class="logo-img">
+                <span class="logo-text">
+                    <span class="green">Kilimo</span><span class="gold">Smart</span>
+                </span>
             </div>
+            
+            <!-- Desktop Menu -->
             <div class="nav-menu">
-                <a href="#" class="nav-link active" data-page="home" data-track="nav-home">
-                    <i class="icon-home"></i> Nyumbani
-                </a>
-                <a href="#" class="nav-link" data-page="marketplace" data-track="nav-marketplace">
-                    <i class="icon-market"></i> Soko
-                </a>
-                <a href="#" class="nav-link" data-page="education" data-track="nav-education">
-                    <i class="icon-education"></i> Elimu
-                </a>
-                <a href="#" class="nav-link" data-page="community" data-track="nav-community">
-                    <i class="icon-community"></i> Jamii
-                </a>
-                <a href="#" class="nav-link" data-page="profile" data-track="nav-profile">
-                    <i class="icon-profile"></i> Wasifu
-                </a>
+                <a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Nyumbani</a>
+                <a href="#" class="nav-link" data-page="marketplace"><i class="fas fa-store"></i> Soko</a>
+                <a href="#" class="nav-link" data-page="education"><i class="fas fa-graduation-cap"></i> Elimu</a>
+                <a href="#" class="nav-link" data-page="profile"><i class="fas fa-user"></i> Wasifu</a>
             </div>
+            
+            <!-- Actions -->
             <div class="nav-actions">
-                <button id="darkModeToggle" class="dark-toggle" data-track="dark-toggle">🌙</button>
-                <button id="notifBtn" class="notif-btn" data-track="notifications">🔔 <span class="notif-badge">3</span></button>
+                <button class="nav-btn" id="darkToggle"><i class="fas fa-moon"></i></button>
+                <button class="nav-btn" id="notifBtn">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="btn-primary hide-mobile" id="loginBtn" style="padding:6px 16px;font-size:0.7rem;">
+                    <i class="fas fa-sign-in-alt"></i> Ingia
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main id="mainContent">
-        <!-- Home Page -->
+    <!-- ============================================================
+    MAIN CONTENT
+    ============================================================ -->
+    <main>
+        
+        <!-- ==========================================================
+        HOME PAGE
+        ========================================================== -->
         <section id="homePage" class="page active">
-            <div class="welcome-section">
-                <h1>Karibu Kilimo<span class="gold">Smart</span></h1>
-                <p>Jukwaa la kisasa la wakulima wa kidunia</p>
+            
+            <!-- Welcome -->
+            <div class="welcome">
+                <h1><span class="green">Karibu</span> <span class="gold">KilimoSmart</span></h1>
+                <p><i class="fas fa-globe-africa"></i> Jukwaa la kisasa la wakulima wa kidunia</p>
             </div>
-
-            <!-- Quick Stats -->
+            
+            <!-- Stats -->
             <div class="stats-grid">
-                <div class="stat-card" data-track="stat-farmers">
-                    <div class="stat-number">12,458</div>
-                    <div class="stat-label">Wakulima</div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <div class="number">12,458</div>
+                    <div class="label">Wakulima</div>
+                    <div class="change"><i class="fas fa-arrow-up"></i> 12%</div>
                 </div>
-                <div class="stat-card" data-track="stat-products">
-                    <div class="stat-number">3,247</div>
-                    <div class="stat-label">Bidhaa</div>
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-boxes"></i></div>
+                    <div class="number">3,247</div>
+                    <div class="label">Bidhaa</div>
+                    <div class="change"><i class="fas fa-arrow-up"></i> 8%</div>
                 </div>
-                <div class="stat-card" data-track="stat-courses">
-                    <div class="stat-number">892</div>
-                    <div class="stat-label">Mafunzo</div>
-                </div>
-            </div>
-
-            <!-- Feed Posts -->
-            <div class="feed-section">
-                <div class="create-post">
-                    <img src="images/default-avatar.png" alt="Avatar" class="avatar">
-                    <input type="text" placeholder="Andika chapisho lako..." id="postInput">
-                    <button id="postBtn" class="btn-primary" data-track="create-post">Chapisha</button>
-                </div>
-                <div id="postsContainer" class="posts-container">
-                    <!-- Posts rendered by JS -->
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-book-open"></i></div>
+                    <div class="number">892</div>
+                    <div class="label">Mafunzo</div>
+                    <div class="change"><i class="fas fa-arrow-up"></i> 15%</div>
                 </div>
             </div>
-        </section>
-
-        <!-- Marketplace Page -->
-        <section id="marketplacePage" class="page">
-            <h2>Soko la Kilimo</h2>
-            <div class="marketplace-filters">
-                <select id="categoryFilter" data-track="filter-category">
-                    <option value="all">Kategoria zote</option>
-                    <option value="mbolea">Mbolea</option>
-                    <option value="mbegu">Mbegu</option>
-                    <option value="vifaa">Vifaa vya kulimia</option>
-                    <option value="nafaka">Nafaka</option>
-                    <option value="dawa">Dawa za mimea</option>
-                </select>
-                <input type="text" placeholder="Tafuta bidhaa..." id="searchMarket" data-track="search-market">
-            </div>
-            <div id="marketplaceItems" class="marketplace-grid">
-                <!-- Rendered by JS -->
-            </div>
-        </section>
-
-        <!-- Education Page -->
-        <section id="educationPage" class="page">
-            <h2>Elimu ya Kilimo</h2>
-            <div class="edu-categories">
-                <button class="edu-cat active" data-cat="all" data-track="edu-all">Zote</button>
-                <button class="edu-cat" data-cat="kilimo" data-track="edu-kilimo">Kilimo</button>
-                <button class="edu-cat" data-cat="ufugaji" data-track="edu-ufugaji">Ufugaji</button>
-                <button class="edu-cat" data-cat="biashara" data-track="edu-biashara">Biashara</button>
-                <button class="edu-cat" data-cat="teknolojia" data-track="edu-teknolojia">Teknolojia</button>
-            </div>
-            <div id="educationContent" class="edu-grid">
-                <!-- Rendered by JS -->
-            </div>
-        </section>
-
-        <!-- Community Page -->
-        <section id="communityPage" class="page">
-            <h2>Jamii ya Wakulima</h2>
-            <div class="community-tabs">
-                <button class="comm-tab active" data-tab="groups" data-track="comm-groups">Vikundi</button>
-                <button class="comm-tab" data-tab="events" data-track="comm-events">Matukio</button>
-                <button class="comm-tab" data-tab="discussions" data-track="comm-discussions">Majadiliano</button>
-            </div>
-            <div id="communityContent">
-                <!-- Rendered by JS -->
-            </div>
-        </section>
-
-        <!-- Profile Page -->
-        <section id="profilePage" class="page">
-            <div class="profile-header">
-                <div class="profile-cover"></div>
-                <div class="profile-info">
-                    <img src="images/default-avatar.png" alt="Profile" class="profile-avatar">
-                    <h2 id="profileName">Mkulima Smart</h2>
-                    <p id="profileBio">Mkulima wa kidunia 🌍</p>
-                    <div class="profile-stats">
-                        <span><strong>150</strong> Wanaofuata</span>
-                        <span><strong>230</strong> Wanafuata</span>
-                        <span><strong>45</strong> Chapisho</span>
+            
+            <!-- Slides -->
+            <div class="slides-container morph-card" style="padding:0;overflow:hidden;">
+                <div class="slides-wrapper" id="slidesWrapper">
+                    <div class="slide-item">
+                        <span class="icon"><i class="fas fa-seedling" style="color:var(--green-lime);"></i></span>
+                        <h3>Kilimo Endelevu</h3>
+                        <p>Jifunze mbinu za kisasa za kilimo endelevu zenye tija na zisizoharibu mazingira.</p>
+                        <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
                     </div>
-                    <button class="btn-primary" id="editProfileBtn" data-track="edit-profile">Hariri Wasifu</button>
+                    <div class="slide-item">
+                        <span class="icon"><i class="fas fa-robot" style="color:var(--gold-main);"></i></span>
+                        <h3>Teknolojia ya Kilimo</h3>
+                        <p>Matumizi ya teknolojia ya kisasa kwa kilimo, ikiwemo sensorer, drones na AI.</p>
+                        <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="slide-item">
+                        <span class="icon"><i class="fas fa-hand-holding-usd" style="color:var(--green-lime);"></i></span>
+                        <h3>Biashara ya Mazao</h3>
+                        <p>Jinsi ya kuuza mazao yako kwa bei nzuri na kuunda mtandao wa wateja.</p>
+                        <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="slide-item">
+                        <span class="icon"><i class="fas fa-cloud-sun-rain" style="color:var(--gold-main);"></i></span>
+                        <h3>Hali ya Hewa</h3>
+                        <p>Taarifa za hali ya hewa kwa wakati ili kupanga shughuli zako za kilimo.</p>
+                        <button class="btn-slide">Soma Zaidi <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="slide-dots" id="slideDots">
+                    <button class="slide-dot active" data-index="0"></button>
+                    <button class="slide-dot" data-index="1"></button>
+                    <button class="slide-dot" data-index="2"></button>
+                    <button class="slide-dot" data-index="3"></button>
                 </div>
             </div>
-            <div class="profile-tabs">
-                <button class="prof-tab active" data-tab="posts" data-track="profile-posts">Chapisho</button>
-                <button class="prof-tab" data-tab="products" data-track="profile-products">Bidhaa</button>
-                <button class="prof-tab" data-tab="saved" data-track="profile-saved">Zilizohifadhiwa</button>
+            
+            <!-- Weather -->
+            <div class="morph-card">
+                <div class="weather-widget">
+                    <div class="left">
+                        <span class="icon"><i class="fas fa-sun"></i></span>
+                        <div>
+                            <div class="temp">28°C</div>
+                            <div class="cond"><i class="fas fa-cloud-sun"></i> Jua kali</div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <span><i class="fas fa-tint"></i> 65%</span>
+                        <span><i class="fas fa-wind"></i> 12 km/h</span>
+                    </div>
+                    <div class="updated"><i class="fas fa-clock"></i> Imesasishwa sasa hivi</div>
+                </div>
             </div>
-            <div id="profileContent">
-                <!-- Rendered by JS -->
+            
+            <!-- 4 Tabs -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="tab1">
+                        <i class="fas fa-fire"></i> <span>Trending</span>
+                    </button>
+                    <button class="tab-btn" data-tab="tab2">
+                        <i class="fas fa-clock"></i> <span>Hivi Punde</span>
+                    </button>
+                    <button class="tab-btn" data-tab="tab3">
+                        <i class="fas fa-star"></i> <span>Mapendwa</span>
+                    </button>
+                    <button class="tab-btn" data-tab="tab4">
+                        <i class="fas fa-users"></i> <span>Jamii</span>
+                    </button>
+                </div>
+                
+                <!-- Tab 1: Trending -->
+                <div class="tab-content active" id="tab1">
+                    <div class="post-card">
+                        <div class="post-header">
+                            <img src="images/default-avatar.png" alt="Avatar" class="avatar">
+                            <div>
+                                <div class="name">Mkulima Smart</div>
+                                <div class="time"><i class="far fa-clock"></i> Saa 1 iliyopita</div>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <i class="fas fa-seedling" style="color:var(--green-lime);"></i> Leo nimepanda mbegu mpya za mahindi zenye tija. Natumaini mavuno mazuri! 🌽
+                        </div>
+                        <div class="post-actions">
+                            <button class="liked"><i class="fas fa-heart"></i> 24</button>
+                            <button><i class="far fa-comment"></i> 5</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                    <div class="post-card">
+                        <div class="post-header">
+                            <img src="images/default-avatar.png" alt="Avatar" class="avatar">
+                            <div>
+                                <div class="name">FarmTech</div>
+                                <div class="time"><i class="far fa-clock"></i> Saa 2 iliyopita</div>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <i class="fas fa-robot" style="color:var(--gold-main);"></i> Teknolojia mpya ya kumwagilia inapunguza matumizi ya maji kwa 40%.
+                        </div>
+                        <div class="post-actions">
+                            <button><i class="far fa-heart"></i> 42</button>
+                            <button><i class="far fa-comment"></i> 12</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 2: Hivi Punde -->
+                <div class="tab-content" id="tab2">
+                    <div class="post-card">
+                        <div class="post-header">
+                            <img src="images/default-avatar.png" alt="Avatar" class="avatar">
+                            <div>
+                                <div class="name">GreenFarm Ltd</div>
+                                <div class="time"><i class="far fa-clock"></i> Saa 3 iliyopita</div>
+                            </div>
+                        </div>
+                        <div class="post-body">
+                            <i class="fas fa-leaf" style="color:var(--green-lime);"></i> Mbolea mpya ya organic imewasili sokoni. Bei nzuri kwa wakulima!
+                        </div>
+                        <div class="post-actions">
+                            <button><i class="far fa-heart"></i> 18</button>
+                            <button><i class="far fa-comment"></i> 7</button>
+                            <button><i class="far fa-bookmark"></i></button>
+                            <button><i class="fas fa-share-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 3: Mapendwa -->
+                <div class="tab-content" id="tab3">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        <div class="morph-card" style="text-align:center;padding:12px;">
+                            <i class="fas fa-trophy" style="font-size:2rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.85rem;">Mkulima Bora</div>
+                            <div style="color:rgba(255,255,255,0.3);font-size:0.65rem;">Mwezi huu</div>
+                        </div>
+                        <div class="morph-card" style="text-align:center;padding:12px;">
+                            <i class="fas fa-award" style="font-size:2rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.85rem;">Bidhaa Bora</div>
+                            <div style="color:rgba(255,255,255,0.3);font-size:0.65rem;">Mbolea Organic</div>
+                        </div>
+                        <div class="morph-card" style="text-align:center;padding:12px;">
+                            <i class="fas fa-medal" style="font-size:2rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.85rem;">Mafunzo Bora</div>
+                            <div style="color:rgba(255,255,255,0.3);font-size:0.65rem;">Kilimo Endelevu</div>
+                        </div>
+                        <div class="morph-card" style="text-align:center;padding:12px;">
+                            <i class="fas fa-crown" style="font-size:2rem;color:var(--gold-main);"></i>
+                            <div style="font-weight:600;color:white;font-size:0.85rem;">Mzalishaji Bora</div>
+                            <div style="color:rgba(255,255,255,0.3);font-size:0.65rem;">GreenFarm Ltd</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 4: Jamii -->
+                <div class="tab-content" id="tab4">
+                    <div class="comm-card">
+                        <span class="icon"><i class="fas fa-users" style="color:var(--green-lime);"></i></span>
+                        <div>
+                            <div class="name">Wakulima wa Tanzania</div>
+                            <div class="members"><i class="fas fa-user-friends"></i> 2,340 wanachama</div>
+                        </div>
+                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                    </div>
+                    <div class="comm-card">
+                        <span class="icon"><i class="fas fa-robot" style="color:var(--gold-main);"></i></span>
+                        <div>
+                            <div class="name">Teknolojia ya Kilimo</div>
+                            <div class="members"><i class="fas fa-user-friends"></i> 1,567 wanachama</div>
+                        </div>
+                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                    </div>
+                    <div class="comm-card">
+                        <span class="icon"><i class="fas fa-hand-holding-usd" style="color:var(--green-lime);"></i></span>
+                        <div>
+                            <div class="name">Biashara ya Mazao</div>
+                            <div class="members"><i class="fas fa-user-friends"></i> 1,234 wanachama</div>
+                        </div>
+                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                    </div>
+                    <div class="comm-card">
+                        <span class="icon"><i class="fas fa-seedling" style="color:var(--gold-main);"></i></span>
+                        <div>
+                            <div class="name">Kilimo Endelevu</div>
+                            <div class="members"><i class="fas fa-user-friends"></i> 987 wanachama</div>
+                        </div>
+                        <button class="btn-join"><i class="fas fa-user-plus"></i> Jiunge</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Create Post -->
+            <div class="post-input">
+                <img src="images/default-avatar.png" alt="Avatar" class="avatar">
+                <input type="text" placeholder="Andika chapisho lako..." id="postInput">
+                <button class="btn-primary" id="postBtn" style="padding:6px 14px;font-size:0.7rem;">
+                    <i class="fas fa-pen"></i> Chapisha
+                </button>
             </div>
         </section>
+        
+        <!-- ==========================================================
+        MARKETPLACE PAGE
+        ========================================================== -->
+        <section id="marketplacePage" class="page">
+            <h2 style="color:white;font-size:1.2rem;margin:10px 0;">
+                <i class="fas fa-store" style="color:var(--gold-main);"></i> Soko la Kilimo
+            </h2>
+            
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                <select id="categoryFilter" style="flex:1;padding:8px 12px;border-radius:40px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:white;font-size:0.75rem;min-width:100px;">
+                    <option value="all" style="background:#0d4a0d;"><i class="fas fa-list"></i> Zote</option>
+                    <option value="mbolea" style="background:#0d4a0d;"><i class="fas fa-leaf"></i> Mbolea</option>
+                    <option value="mbegu" style="background:#0d4a0d;"><i class="fas fa-seedling"></i> Mbegu</option>
+                    <option value="vifaa" style="background:#0d4a0d;"><i class="fas fa-tractor"></i> Vifaa</option>
+                    <option value="nafaka" style="background:#0d4a0d;"><i class="fas fa-wheat"></i> Nafaka</option>
+                    <option value="dawa" style="background:#0d4a0d;"><i class="fas fa-flask"></i> Dawa</option>
+                </select>
+                <input type="text" placeholder="Tafuta bidhaa..." id="searchMarket" style="flex:2;padding:8px 14px;border-radius:40px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:white;font-size:0.75rem;min-width:120px;">
+            </div>
+            
+            <div class="market-grid" id="marketplaceItems">
+                <div class="product-card">
+                    <div class="img"><i class="fas fa-leaf" style="color:var(--green-lime);"></i></div>
+                    <div class="info">
+                        <div class="title">Mbolea Organic</div>
+                        <div class="price">25,000 TSh</div>
+                        <div class="seller"><i class="fas fa-user"></i> GreenFarm Ltd</div>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> 4.8</div>
+                        <button class="btn-buy"><i class="fas fa-shopping-cart"></i> Nunua</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="img"><i class="fas fa-seedling" style="color:var(--gold-main);"></i></div>
+                    <div class="info">
+                        <div class="title">Mbegu Mahindi</div>
+                        <div class="price">15,000 TSh</div>
+                        <div class="seller"><i class="fas fa-user"></i> SeedCo Ltd</div>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 5.0</div>
+                        <button class="btn-buy"><i class="fas fa-shopping-cart"></i> Nunua</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="img"><i class="fas fa-tractor" style="color:var(--green-lime);"></i></div>
+                    <div class="info">
+                        <div class="title">Trekta ya Mkulima</div>
+                        <div class="price">4,500,000 TSh</div>
+                        <div class="seller"><i class="fas fa-user"></i> AgriMachines</div>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 4.9</div>
+                        <button class="btn-buy"><i class="fas fa-shopping-cart"></i> Nunua</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="img"><i class="fas fa-wheat" style="color:var(--gold-main);"></i></div>
+                    <div class="info">
+                        <div class="title">Nafaka za Mahindi</div>
+                        <div class="price">8,000 TSh</div>
+                        <div class="seller"><i class="fas fa-user"></i> HarvestPlus</div>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> 4.3</div>
+                        <button class="btn-buy"><i class="fas fa-shopping-cart"></i> Nunua</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==========================================================
+        EDUCATION PAGE
+        ========================================================== -->
+        <section id="educationPage" class="page">
+            <h2 style="color:white;font-size:1.2rem;margin:10px 0;">
+                <i class="fas fa-graduation-cap" style="color:var(--gold-main);"></i> Elimu ya Kilimo
+            </h2>
+            
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+                <button class="edu-filter active" data-cat="all" style="padding:4px 14px;border-radius:30px;border:1px solid var(--gold-main);background:var(--gold-main);color:#0d4a0d;font-size:0.65rem;font-weight:600;cursor:pointer;">
+                    <i class="fas fa-list"></i> Zote
+                </button>
+                <button class="edu-filter" data-cat="kilimo" style="padding:4px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.65rem;cursor:pointer;">
+                    <i class="fas fa-seedling"></i> Kilimo
+                </button>
+                <button class="edu-filter" data-cat="ufugaji" style="padding:4px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.65rem;cursor:pointer;">
+                    <i class="fas fa-dog"></i> Ufugaji
+                </button>
+                <button class="edu-filter" data-cat="biashara" style="padding:4px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.65rem;cursor:pointer;">
+                    <i class="fas fa-hand-holding-usd"></i> Biashara
+                </button>
+                <button class="edu-filter" data-cat="teknolojia" style="padding:4px 14px;border-radius:30px;border:1px solid rgba(255,255,255,0.1);background:transparent;color:rgba(255,255,255,0.4);font-size:0.65rem;cursor:pointer;">
+                    <i class="fas fa-microchip"></i> Teknolojia
+                </button>
+            </div>
+            
+            <div class="edu-grid" id="educationContent">
+                <div class="edu-card">
+                    <div class="icon"><i class="fas fa-seedling" style="color:var(--green-lime);"></i></div>
+                    <h4>Mbinu za Kilimo Endelevu</h4>
+                    <div class="cat"><i class="fas fa-tag"></i> KILIMO</div>
+                    <p>Jifunze mbinu za kisasa za kilimo endelevu zenye tija.</p>
+                    <div class="meta">
+                        <span><i class="far fa-clock"></i> Saa 4</span>
+                        <span><i class="fas fa-book"></i> 12 mafunzo</span>
+                        <span><i class="fas fa-users"></i> 234</span>
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="icon"><i class="fas fa-dog" style="color:var(--gold-main);"></i></div>
+                    <h4>Ufugaji Bora wa Kuku</h4>
+                    <div class="cat"><i class="fas fa-tag"></i> UFUGAJI</div>
+                    <p>Mbinu bora za ufugaji wa kuku wa kienyeji na wa kisasa.</p>
+                    <div class="meta">
+                        <span><i class="far fa-clock"></i> Saa 3</span>
+                        <span><i class="fas fa-book"></i> 8 mafunzo</span>
+                        <span><i class="fas fa-users"></i> 156</span>
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="icon"><i class="fas fa-hand-holding-usd" style="color:var(--green-lime);"></i></div>
+                    <h4>Biashara ya Mazao</h4>
+                    <div class="cat"><i class="fas fa-tag"></i> BIASHARA</div>
+                    <p>Jinsi ya kuuza mazao yako kwa bei nzuri na kuunda wateja.</p>
+                    <div class="meta">
+                        <span><i class="far fa-clock"></i> Saa 5</span>
+                        <span><i class="fas fa-book"></i> 15 mafunzo</span>
+                        <span><i class="fas fa-users"></i> 312</span>
+                    </div>
+                </div>
+                <div class="edu-card">
+                    <div class="icon"><i class="fas fa-microchip" style="color:var(--gold-main);"></i></div>
+                    <h4>Teknolojia katika Kilimo</h4>
+                    <div class="cat"><i class="fas fa-tag"></i> TEKNOLOJIA</div>
+                    <p>Matumizi ya teknolojia ya kisasa kwa kilimo, ikiwemo sensorer.</p>
+                    <div class="meta">
+                        <span><i class="far fa-clock"></i> Saa 6</span>
+                        <span><i class="fas fa-book"></i> 20 mafunzo</span>
+                        <span><i class="fas fa-users"></i> 189</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ==========================================================
+        PROFILE PAGE
+        ========================================================== -->
+        <section id="profilePage" class="page">
+            <div class="morph-card" style="padding:0;overflow:hidden;">
+                <div class="profile-cover">
+                    <button class="btn-cover"><i class="fas fa-camera"></i> Badilisha</button>
+                </div>
+                <div class="profile-body">
+                    <img src="images/default-avatar.png" alt="Profile" class="avatar">
+                    <h2 id="profileName">Mkulima Smart</h2>
+                    <div class="bio"><i class="fas fa-map-marker-alt"></i> Mkulima wa kidunia</div>
+                    <div class="stats">
+                        <div><strong>150</strong> Wanaofuata</div>
+                        <div><strong>230</strong> Wanafuata</div>
+                        <div><strong>45</strong> Chapisho</div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-primary" style="padding:6px 18px;font-size:0.7rem;"><i class="fas fa-user-edit"></i> Hariri</button>
+                        <button class="btn-outline" style="padding:6px 18px;font-size:0.7rem;"><i class="fas fa-cog"></i> Mipangilio</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Tabs -->
+            <div class="prof-tabs">
+                <button class="prof-tab active" data-tab="prof-posts"><i class="fas fa-list"></i> Chapisho</button>
+                <button class="prof-tab" data-tab="prof-products"><i class="fas fa-box"></i> Bidhaa</button>
+                <button class="prof-tab" data-tab="prof-saved"><i class="fas fa-bookmark"></i> Zilizohifadhiwa</button>
+            </div>
+            
+            <div id="prof-posts" class="prof-content active">
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="images/default-avatar.png" alt="Avatar" class="avatar">
+                        <div>
+                            <div class="name">Mkulima Smart</div>
+                            <div class="time"><i class="far fa-clock"></i> Saa 1 iliyopita</div>
+                        </div>
+                    </div>
+                    <div class="post-body">
+                        <i class="fas fa-seedling" style="color:var(--green-lime);"></i> Mavuno mazuri mwaka huu! Natumaini kila mkulima atafanikiwa.
+                    </div>
+                    <div class="post-actions">
+                        <button><i class="far fa-heart"></i> 12</button>
+                        <button><i class="far fa-comment"></i> 3</button>
+                        <button><i class="far fa-bookmark"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div id="prof-products" class="prof-content">
+                <div class="morph-card text-center" style="padding:30px;">
+                    <i class="fas fa-box-open" style="font-size:3rem;color:rgba(255,255,255,0.1);"></i>
+                    <p style="color:rgba(255,255,255,0.3);margin-top:8px;">Hakuna bidhaa bado</p>
+                    <button class="btn-outline" style="font-size:0.7rem;margin-top:8px;"><i class="fas fa-plus"></i> Ongeza Bidhaa</button>
+                </div>
+            </div>
+            <div id="prof-saved" class="prof-content">
+                <div class="morph-card text-center" style="padding:30px;">
+                    <i class="fas fa-bookmark" style="font-size:3rem;color:rgba(255,255,255,0.1);"></i>
+                    <p style="color:rgba(255,255,255,0.3);margin-top:8px;">Hakuna zilizohifadhiwa</p>
+                </div>
+            </div>
+        </section>
+        
     </main>
 
-    <!-- Bottom Navigation for Mobile -->
-    <div class="bottom-nav">
-        <button class="bottom-nav-item active" data-page="home" data-track="bnav-home">
-            <span>🏠</span>
-            <span>Nyumbani</span>
+    <!-- ============================================================
+    BOTTOM NAVIGATION
+    ============================================================ -->
+    <nav class="bottom-nav">
+        <button class="bottom-item active" data-page="home">
+            <span class="icon"><i class="fas fa-home"></i></span>
+            <span class="label">Nyumbani</span>
         </button>
-        <button class="bottom-nav-item" data-page="marketplace" data-track="bnav-marketplace">
-            <span>🛒</span>
-            <span>Soko</span>
+        <button class="bottom-item" data-page="marketplace">
+            <span class="icon"><i class="fas fa-store"></i></span>
+            <span class="label">Soko</span>
         </button>
-        <button class="bottom-nav-item" data-page="education" data-track="bnav-education">
-            <span>📚</span>
-            <span>Elimu</span>
+        <button class="bottom-item" data-page="education">
+            <span class="icon"><i class="fas fa-graduation-cap"></i></span>
+            <span class="label">Elimu</span>
         </button>
-        <button class="bottom-nav-item" data-page="community" data-track="bnav-community">
-            <span>👥</span>
-            <span>Jamii</span>
+        <button class="bottom-item" data-page="profile">
+            <span class="icon"><i class="fas fa-user"></i></span>
+            <span class="label">Wasifu</span>
         </button>
-        <button class="bottom-nav-item" data-page="profile" data-track="bnav-profile">
-            <span>👤</span>
-            <span>Wasifu</span>
-        </button>
-    </div>
+    </nav>
 
-    <!-- Modals -->
+    <!-- ============================================================
+    MODALS
+    ============================================================ -->
+    <!-- Post Modal -->
     <div id="postModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3>Chapisha Chapisho</h3>
-            <textarea id="postTextarea" placeholder="Ni nini kipya?..."></textarea>
-            <div class="post-options">
-                <button class="btn-option" data-track="post-photo">📷 Picha</button>
-                <button class="btn-option" data-track="post-video">🎥 Video</button>
-                <button class="btn-option" data-track="post-location">📍 Eneo</button>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <h3><i class="fas fa-pen" style="color:var(--gold-main);"></i> Chapisha Chapisho</h3>
+                <button class="close" id="closePostModal">&times;</button>
             </div>
-            <button id="submitPostBtn" class="btn-primary" data-track="submit-post">Chapisha</button>
+            <textarea id="postTextarea" placeholder="Ni nini kipya?..." style="min-height:100px;resize:vertical;"></textarea>
+            <div style="display:flex;gap:6px;margin:8px 0;">
+                <button style="flex:1;padding:6px;border-radius:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.7rem;">
+                    <i class="fas fa-image"></i> Picha
+                </button>
+                <button style="flex:1;padding:6px;border-radius:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.7rem;">
+                    <i class="fas fa-video"></i> Video
+                </button>
+                <button style="flex:1;padding:6px;border-radius:30px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.7rem;">
+                    <i class="fas fa-map-marker-alt"></i> Eneo
+                </button>
+            </div>
+            <button id="submitPostBtn" class="btn-primary" style="width:100%;padding:10px;border-radius:30px;">
+                <i class="fas fa-paper-plane"></i> Chapisha
+            </button>
         </div>
     </div>
 
+    <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3>Ingia au Jisajili</h3>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                <h3><i class="fas fa-sign-in-alt" style="color:var(--gold-main);"></i> Ingia au Jisajili</h3>
+                <button class="close" id="closeLoginModal">&times;</button>
+            </div>
             <form id="authForm">
-                <input type="text" placeholder="Jina la mtumiaji" id="username" required>
-                <input type="password" placeholder="Nenosiri" id="password" required>
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Jina la mtumiaji" id="username" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Nenosiri" id="password" required>
+                </div>
                 <select id="accountType">
-                    <option value="individual">Binafsi</option>
-                    <option value="business">Biashara</option>
-                    <option value="brand">Brand</option>
+                    <option value="individual"><i class="fas fa-user"></i> Binafsi</option>
+                    <option value="business"><i class="fas fa-store"></i> Biashara</option>
+                    <option value="brand"><i class="fas fa-tag"></i> Brand</option>
                 </select>
-                <button type="submit" class="btn-primary" data-track="auth-submit">Ingia</button>
-                <p class="auth-switch">Huna akaunti? <a href="#" id="switchToRegister" data-track="auth-switch">Jisajili</a></p>
+                <button type="submit" class="btn-primary" style="width:100%;padding:10px;border-radius:30px;margin:6px 0;">
+                    <i class="fas fa-sign-in-alt"></i> Ingia
+                </button>
+                <p style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-align:center;">
+                    Huna akaunti? <a href="#" id="switchToRegister" style="color:var(--gold-main);"><i class="fas fa-user-plus"></i> Jisajili</a>
+                </p>
             </form>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="js/analytics.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/posts.js"></script>
-    <script src="js/marketplace.js"></script>
-    <script src="js/education.js"></script>
-    <script src="js/weather.js"></script>
-    <script src="js/notifications.js"></script>
-    <script src="js/pwa.js"></script>
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // ==========================================================
+            // SLIDES
+            // ==========================================================
+            let currentSlide = 0;
+            const slidesWrapper = document.getElementById('slidesWrapper');
+            const dots = document.querySelectorAll('.slide-dot');
+            const totalSlides = dots.length;
+            
+            function goToSlide(index) {
+                currentSlide = index;
+                slidesWrapper.style.transform = 'translateX(-' + (index * 100) + '%)';
+                dots.forEach(function(dot, i) {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+            
+            dots.forEach(function(dot, index) {
+                dot.addEventListener('click', function() {
+                    goToSlide(index);
+                });
+            });
+            
+            let slideInterval = setInterval(function() {
+                goToSlide((currentSlide + 1) % totalSlides);
+            }, 5000);
+            
+            const slidesContainer = document.querySelector('.slides-container');
+            slidesContainer.addEventListener('mouseenter', function() {
+                clearInterval(slideInterval);
+            });
+            slidesContainer.addEventListener('mouseleave', function() {
+                slideInterval = setInterval(function() {
+                    goToSlide((currentSlide + 1) % totalSlides);
+                }, 5000);
+            });
+            
+            // ==========================================================
+            // 4 TABS
+            // ==========================================================
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-btn').forEach(function(b) {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(function(c) {
+                        c.classList.remove('active');
+                    });
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+            
+            // ==========================================================
+            // PROFILE TABS
+            // ==========================================================
+            document.querySelectorAll('.prof-tab').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.prof-tab').forEach(function(b) {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.prof-content').forEach(function(c) {
+                        c.classList.remove('active');
+                    });
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+            
+            // ==========================================================
+            // EDUCATION FILTERS
+            // ==========================================================
+            document.querySelectorAll('.edu-filter').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.edu-filter').forEach(function(b) {
+                        b.style.background = 'transparent';
+                        b.style.color = 'rgba(255,255,255,0.4)';
+                        b.style.borderColor = 'rgba(255,255,255,0.1)';
+                    });
+                    this.style.background = 'var(--gold-main)';
+                    this.style.color = '#0d4a0d';
+                    this.style.borderColor = 'var(--gold-main)';
+                });
+            });
+            
+            // ==========================================================
+            // NAVIGATION
+            // ==========================================================
+            const navLinks = document.querySelectorAll('.nav-link, .bottom-item');
+            const pages = {
+                home: 'homePage',
+                marketplace: 'marketplacePage',
+                education: 'educationPage',
+                profile: 'profilePage'
+            };
+            
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    
+                    navLinks.forEach(function(l) {
+                        l.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    Object.keys(pages).forEach(function(key) {
+                        var el = document.getElementById(pages[key]);
+                        if (key === page) {
+                            el.classList.add('active');
+                            el.style.display = 'block';
+                        } else {
+                            el.classList.remove('active');
+                            el.style.display = 'none';
+                        }
+                    });
+                    
+                    // Also sync bottom nav
+                    document.querySelectorAll('.bottom-item').forEach(function(item) {
+                        item.classList.toggle('active', item.dataset.page === page);
+                    });
+                });
+            });
+            
+            // ==========================================================
+            // MODALS
+            // ==========================================================
+            function openModal(id) {
+                document.getElementById(id).classList.add('show');
+            }
+            function closeModal(id) {
+                document.getElementById(id).classList.remove('show');
+            }
+            
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                openModal('loginModal');
+            });
+            
+            document.getElementById('postBtn').addEventListener('click', function() {
+                openModal('postModal');
+            });
+            
+            document.getElementById('closePostModal').addEventListener('click', function() {
+                closeModal('postModal');
+            });
+            document.getElementById('closeLoginModal').addEventListener('click', function() {
+                closeModal('loginModal');
+            });
+            
+            document.querySelectorAll('.modal').forEach(function(modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('show');
+                    }
+                });
+            });
+            
+            // ==========================================================
+            // AUTH SWITCH
+            // ==========================================================
+            document.getElementById('switchToRegister').addEventListener('click', function(e) {
+                e.preventDefault();
+                var form = document.getElementById('authForm');
+                var btn = form.querySelector('button[type="submit"]');
+                var title = form.closest('.modal-content').querySelector('h3');
+                
+                if (btn.innerHTML.indexOf('Ingia') !== -1) {
+                    btn.innerHTML = '<i class="fas fa-user-plus"></i> Jisajili';
+                    title.innerHTML = '<i class="fas fa-user-plus" style="color:var(--gold-main);"></i> Jisajili Sasa';
+                    this.textContent = 'Una akaunti? Ingia';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingia';
+                    title.innerHTML = '<i class="fas fa-sign-in-alt" style="color:var(--gold-main);"></i> Ingia au Jisajili';
+                    this.textContent = 'Huna akaunti? Jisajili';
+                }
+            });
+            
+            // ==========================================================
+            // DARK MODE
+            // ==========================================================
+            let darkMode = false;
+            document.getElementById('darkToggle').addEventListener('click', function() {
+                darkMode = !darkMode;
+                document.body.style.background = darkMode ? '#0a0a0a' : 'radial-gradient(ellipse at top, #0d4a0d, #061f06)';
+                this.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            });
+            
+            // ==========================================================
+            // NOTIFICATIONS
+            // ==========================================================
+            let notifCount = 3;
+            document.getElementById('notifBtn').addEventListener('click', function() {
+                var badge = this.querySelector('.badge');
+                if (notifCount > 0) {
+                    notifCount = 0;
+                    badge.style.display = 'none';
+                    showToast('Arifa zote zimesomwa!', 'success');
+                } else {
+                    showToast('Hakuna arifa mpya', 'info');
+                }
+            });
+            
+            // ==========================================================
+            // TOAST NOTIFICATION
+            // ==========================================================
+            function showToast(message, type) {
+                var colors = {
+                    success: 'var(--green-lime)',
+                    info: 'var(--gold-main)',
+                    error: '#ff4444'
+                };
+                
+                var toast = document.createElement('div');
+                toast.style.cssText = [
+                    'position:fixed',
+                    'bottom:100px',
+                    'left:50%',
+                    'transform:translateX(-50%)',
+                    'background:rgba(13,74,13,0.95)',
+                    'backdrop-filter:blur(20px)',
+                    'border:1px solid rgba(255,255,255,0.06)',
+                    'border-radius:16px',
+                    'padding:12px 24px',
+                    'color:white',
+                    'font-size:0.85rem',
+                    'z-index:3000',
+                    'box-shadow:0 8px 30px rgba(0,0,0,0.4)',
+                    'border-left:4px solid ' + (colors[type] || colors.info),
+                    'animation:fadeUp 0.3s ease',
+                    'max-width:90%',
+                    'text-align:center'
+                ].join(';');
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(function() {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.5s';
+                    setTimeout(function() {
+                        toast.remove();
+                    }, 500);
+                }, 3000);
+            }
+            
+            // ==========================================================
+            // POST CREATION
+            // ==========================================================
+            document.getElementById('submitPostBtn').addEventListener('click', function() {
+                var text = document.getElementById('postTextarea').value.trim();
+                if (text) {
+                    showToast('Chapisho limechapishwa!', 'success');
+                    document.getElementById('postTextarea').value = '';
+                    closeModal('postModal');
+                } else {
+                    showToast('Tafadhali andika kitu!', 'error');
+                }
+            });
+            
+            // ==========================================================
+            // POST INPUT ENTER KEY
+            // ==========================================================
+            document.getElementById('postInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    var text = this.value.trim();
+                    if (text) {
+                        showToast('Chapisho limechapishwa!', 'success');
+                        this.value = '';
+                    } else {
+                        showToast('Tafadhali andika kitu!', 'error');
+                    }
+                }
+            });
+            
+            // ==========================================================
+            // MARKETPLACE SEARCH
+            // ==========================================================
+            document.getElementById('searchMarket').addEventListener('input', function() {
+                var query = this.value.toLowerCase();
+                var cards = document.querySelectorAll('.product-card');
+                cards.forEach(function(card) {
+                    var title = card.querySelector('.title').textContent.toLowerCase();
+                    card.style.display = title.includes(query) ? 'block' : 'none';
+                });
+            });
+            
+            // ==========================================================
+            // MARKETPLACE CATEGORY FILTER
+            // ==========================================================
+            document.getElementById('categoryFilter').addEventListener('change', function() {
+                var category = this.value;
+                var cards = document.querySelectorAll('.product-card');
+                cards.forEach(function(card) {
+                    // For demo, show all if 'all' or based on category
+                    // In real app, you'd filter by data attribute
+                    card.style.display = 'block';
+                });
+                if (category !== 'all') {
+                    showToast('Imechujwa: ' + category, 'info');
+                }
+            });
+            
+            console.log('🌾 Kilimo Smart loaded successfully!');
+            console.log('📱 Built with ❤️ for Tanzanian farmers');
+        });
+    </script>
 </body>
 </html>
