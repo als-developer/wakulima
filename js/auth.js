@@ -43,6 +43,9 @@ class AuthManager {
         
         if (!username || !password) {
             showNotification('Tafadhali jaza nyanja zote!', 'error');
+            if (window.analytics) {
+                window.analytics.trackEvent('Auth', 'validation_error');
+            }
             return;
         }
         
@@ -57,6 +60,9 @@ class AuthManager {
         // Check if user exists
         if (this.users.find(u => u.username === username)) {
             showNotification('Jina la mtumiaji tayari lipo!', 'error');
+            if (window.analytics) {
+                window.analytics.trackEvent('Auth', 'register_failed', 'username_exists');
+            }
             return;
         }
         
@@ -77,6 +83,18 @@ class AuthManager {
         this.saveUsers();
         this.login(username, password);
         showNotification('Akaunti imeundwa! Karibu Kilimo Smart!', 'success');
+        
+        // Track registration
+        if (window.analytics) {
+            window.analytics.trackUserAction('register', {
+                username: username,
+                account_type: accountType
+            });
+            // Dispatch event
+            document.dispatchEvent(new CustomEvent('userRegister', {
+                detail: { username, accountType }
+            }));
+        }
     }
     
     login(username, password) {
@@ -86,6 +104,9 @@ class AuthManager {
         
         if (!user) {
             showNotification('Jina au nenosiri si sahihi!', 'error');
+            if (window.analytics) {
+                window.analytics.trackEvent('Auth', 'login_failed', 'invalid_credentials');
+            }
             return;
         }
         
@@ -94,9 +115,23 @@ class AuthManager {
         this.updateUI();
         showNotification(`Karibu tena ${user.username}!`, 'success');
         document.getElementById('loginModal').classList.remove('show');
+        
+        // Track login
+        if (window.analytics) {
+            window.analytics.trackUserAction('login', { username: username });
+            document.dispatchEvent(new CustomEvent('userLogin', {
+                detail: { username }
+            }));
+        }
     }
     
     logout() {
+        if (this.currentUser && window.analytics) {
+            window.analytics.trackUserAction('logout', { 
+                username: this.currentUser.username 
+            });
+        }
+        
         this.currentUser = null;
         localStorage.removeItem('kilimo_user');
         this.updateUI();
