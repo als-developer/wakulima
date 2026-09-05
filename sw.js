@@ -2,7 +2,7 @@
 // KILIMO SMART - SERVICE WORKER
 // ============================================================
 
-const CACHE_NAME = 'kilimo-smart-v2';
+const CACHE_NAME = 'kilimo-smart-v3';
 const OFFLINE_URL = '/index.html';
 
 // Assets to cache
@@ -68,7 +68,7 @@ self.addEventListener('activate', event => {
 // FETCH - Network first, then cache
 // ============================================================
 self.addEventListener('fetch', event => {
-    // Skip cross-origin requests
+    // Skip cross-origin requests except CDN
     if (!event.request.url.startsWith(self.location.origin) &&
         !event.request.url.includes('cdnjs.cloudflare.com')) {
         return;
@@ -77,7 +77,6 @@ self.addEventListener('fetch', event => {
     event.respondWith(
         fetch(event.request)
             .then(response => {
-                // Cache successful responses
                 if (response && response.status === 200) {
                     const clonedResponse = response.clone();
                     caches.open(CACHE_NAME)
@@ -89,13 +88,11 @@ self.addEventListener('fetch', event => {
                 return response;
             })
             .catch(() => {
-                // If network fails, try cache
                 return caches.match(event.request)
                     .then(cachedResponse => {
                         if (cachedResponse) {
                             return cachedResponse;
                         }
-                        // If not in cache, return offline page
                         return caches.match(OFFLINE_URL);
                     });
             })
@@ -103,7 +100,7 @@ self.addEventListener('fetch', event => {
 });
 
 // ============================================================
-// BACKGROUND SYNC - Offline posts
+// BACKGROUND SYNC
 // ============================================================
 self.addEventListener('sync', event => {
     if (event.tag === 'sync-posts') {
@@ -120,7 +117,6 @@ async function syncPendingPosts() {
             const response = await cache.match(request);
             if (response) {
                 const data = await response.json();
-                // Simulate API call
                 console.log('[SW] Syncing post:', data);
                 await cache.delete(request);
             }
@@ -186,13 +182,11 @@ self.addEventListener('notificationclick', event => {
     event.waitUntil(
         clients.matchAll({ type: 'window' })
             .then(windowClients => {
-                // Check if there's already a window/tab open
                 for (let client of windowClients) {
                     if (client.url === '/' && 'focus' in client) {
                         return client.focus();
                     }
                 }
-                // If not, open a new one
                 if (clients.openWindow) {
                     return clients.openWindow('/');
                 }
