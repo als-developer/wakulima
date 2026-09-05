@@ -2,27 +2,21 @@ const CACHE_NAME = 'kilimo-smart-v1';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
-    '/css/style.css',
-    '/css/dark-mode.css',
-    '/css/animations.css',
-    '/js/app.js',
-    '/js/auth.js',
-    '/js/posts.js',
-    '/js/marketplace.js',
-    '/js/education.js',
-    '/js/weather.js',
-    '/js/notifications.js',
-    '/js/pwa.js',
+    '/manifest.json',
     '/images/icon-192.png',
     '/images/icon-512.png',
-    '/images/logo.png'
+    '/images/default-avatar.png',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'
 ];
 
 // Install Service Worker
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(ASSETS_TO_CACHE))
+            .then(cache => {
+                console.log('Caching assets...');
+                return cache.addAll(ASSETS_TO_CACHE);
+            })
             .then(() => self.skipWaiting())
     );
 });
