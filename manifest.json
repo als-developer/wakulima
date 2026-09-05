@@ -8,10 +8,49 @@
   "background_color": "#0d4a0d",
   "theme_color": "#0d4a0d",
   "categories": ["agriculture", "business", "education"],
+  "scope": "/",
+  "lang": "sw",
+  "dir": "ltr",
   "icons": [
+    {
+      "src": "images/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
     {
       "src": "images/icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-384.png",
+      "sizes": "384x384",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -22,6 +61,29 @@
       "purpose": "any maskable"
     }
   ],
+  "shortcuts": [
+    {
+      "name": "Soko",
+      "short_name": "Soko",
+      "description": "Nenda kwenye soko",
+      "url": "/index.html?page=marketplace",
+      "icons": [{ "src": "images/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Chapisha",
+      "short_name": "Chapisha",
+      "description": "Chapisha chapisho jipya",
+      "url": "/index.html?action=post",
+      "icons": [{ "src": "images/icon-96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Elimu",
+      "short_name": "Elimu",
+      "description": "Nenda kwenye elimu",
+      "url": "/index.html?page=education",
+      "icons": [{ "src": "images/icon-96.png", "sizes": "96x96" }]
+    }
+  ],
   "screenshots": [
     {
       "src": "images/screenshot1.png",
@@ -29,20 +91,6 @@
       "type": "image/png"
     }
   ],
-  "shortcuts": [
-    {
-      "name": "Soko",
-      "short_name": "Soko",
-      "description": "Nenda kwenye soko",
-      "url": "/index.html?page=marketplace",
-      "icons": [{ "src": "images/icon-market.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Chapisha",
-      "short_name": "Chapisha",
-      "description": "Chapisha chapisho jipya",
-      "url": "/index.html?action=post",
-      "icons": [{ "src": "images/icon-post.png", "sizes": "96x96" }]
-    }
-  ]
+  "prefer_related_applications": false,
+  "related_applications": []
 }
