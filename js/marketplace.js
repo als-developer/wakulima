@@ -8,16 +8,11 @@ class MarketplaceManager {
     init() {
         this.renderItems();
         
-        // Filters
-        document.getElementById('categoryFilter')?.addEventListener('change', () => {
+        document.getElementById('categoryFilter').addEventListener('change', () => {
             this.filterItems();
-            if (window.analytics) {
-                const category = document.getElementById('categoryFilter').value;
-                window.analytics.trackEvent('Marketplace', 'filter_category', category);
-            }
         });
         
-        document.getElementById('searchMarket')?.addEventListener('input', () => {
+        document.getElementById('searchMarket').addEventListener('input', () => {
             this.filterItems();
         });
     }
@@ -35,23 +30,19 @@ class MarketplaceManager {
         return [
             {
                 id: '1',
-                title: 'Mbolea ya Organic',
+                title: 'Mbolea Organic',
                 price: '25,000 TSh',
                 category: 'mbolea',
                 seller: 'GreenFarm Ltd',
-                image: '/images/product1.jpg',
-                rating: 4.8,
-                description: 'Mbolea asili ya mboji iliyochanganywa na madini'
+                rating: 4.8
             },
             {
                 id: '2',
-                title: 'Mbegu za Mahindi Hybrid',
+                title: 'Mbegu Mahindi',
                 price: '15,000 TSh',
                 category: 'mbegu',
-                seller: 'SeedCo Tanzania',
-                image: '/images/product2.jpg',
-                rating: 4.5,
-                description: 'Mbegu bora za mahindi zenye tija ya tani 40 kwa ekari'
+                seller: 'SeedCo Ltd',
+                rating: 5.0
             },
             {
                 id: '3',
@@ -59,9 +50,7 @@ class MarketplaceManager {
                 price: '4,500,000 TSh',
                 category: 'vifaa',
                 seller: 'AgriMachines',
-                image: '/images/product3.jpg',
-                rating: 4.9,
-                description: 'Trekta yenye nguvu ya 75HP, inafaa kwa shamba kubwa'
+                rating: 4.9
             },
             {
                 id: '4',
@@ -69,9 +58,7 @@ class MarketplaceManager {
                 price: '8,000 TSh',
                 category: 'nafaka',
                 seller: 'HarvestPlus',
-                image: '/images/product4.jpg',
-                rating: 4.3,
-                description: 'Mahindi mazuri ya mavuno ya mwaka huu'
+                rating: 4.3
             }
         ];
     }
@@ -89,7 +76,6 @@ class MarketplaceManager {
         if (search) {
             filtered = filtered.filter(item => 
                 item.title.toLowerCase().includes(search) ||
-                item.description.toLowerCase().includes(search) ||
                 item.seller.toLowerCase().includes(search)
             );
         }
@@ -105,46 +91,37 @@ class MarketplaceManager {
         
         if (displayItems.length === 0) {
             container.innerHTML = `
-                <div style="grid-column:1/-1;text-align:center;padding:40px;color:#888;">
-                    <div style="font-size:3rem;margin-bottom:12px;">🔍</div>
-                    <h3>Hakuna bidhaa zilizopatikana</h3>
-                    <p>Jaribu kubadili vigezo vya utafutaji</p>
+                <div class="morph-card text-center" style="grid-column:1/-1;padding:40px;">
+                    <i class="fas fa-search" style="font-size:3rem;color:rgba(255,255,255,0.1);"></i>
+                    <p style="color:rgba(255,255,255,0.3);margin-top:8px;">Hakuna bidhaa zilizopatikana</p>
                 </div>
             `;
             return;
         }
         
         container.innerHTML = displayItems.map(item => `
-            <div class="marketplace-item" data-track="product-view" onclick="window.marketplaceManager.viewProduct('${item.id}')">
-                <div style="background:linear-gradient(135deg,#f0f0f0,#e0e0e0);height:200px;display:flex;align-items:center;justify-content:center;font-size:3rem;">
-                    ${this.getCategoryIcon(item.category)}
-                </div>
-                <div class="item-info">
-                    <div class="item-title">${item.title}</div>
-                    <div class="item-price">${item.price}</div>
-                    <div class="item-seller">👤 ${item.seller}</div>
-                    <div style="color:#888;font-size:0.9rem;margin:8px 0;">
-                        ⭐ ${item.rating} ${this.getStars(item.rating)}
-                    </div>
-                    <p style="color:#666;font-size:0.9rem;margin:8px 0;">${item.description}</p>
-                    <button onclick="window.marketplaceManager.buyItem('${item.id}')" 
-                            class="btn-primary" style="width:100%;" data-track="buy-${item.id}">
-                        Nunua Sasa
-                    </button>
+            <div class="product-card">
+                <div class="img"><i class="fas ${this.getIcon(item.category)}"></i></div>
+                <div class="info">
+                    <div class="title">${item.title}</div>
+                    <div class="price">${item.price}</div>
+                    <div class="seller"><i class="fas fa-user"></i> ${item.seller}</div>
+                    <div class="rating">${this.getStars(item.rating)}</div>
+                    <button class="btn-buy"><i class="fas fa-shopping-cart"></i> Nunua</button>
                 </div>
             </div>
         `).join('');
     }
     
-    getCategoryIcon(category) {
+    getIcon(category) {
         const icons = {
-            'mbolea': '🌱',
-            'mbegu': '🌾',
-            'vifaa': '🚜',
-            'nafaka': '🌽',
-            'dawa': '🧪'
+            'mbolea': 'fa-leaf',
+            'mbegu': 'fa-seedling',
+            'vifaa': 'fa-tractor',
+            'nafaka': 'fa-wheat',
+            'dawa': 'fa-flask'
         };
-        return icons[category] || '📦';
+        return icons[category] || 'fa-box';
     }
     
     getStars(rating) {
@@ -153,47 +130,7 @@ class MarketplaceManager {
         const empty = 5 - full - half;
         return '⭐'.repeat(full) + (half ? '✨' : '') + '☆'.repeat(empty);
     }
-    
-    viewProduct(itemId) {
-        const item = this.items.find(i => i.id === itemId);
-        if (!item) return;
-        
-        if (window.analytics) {
-            window.analytics.trackUserAction('product_viewed', {
-                product: item.title,
-                category: item.category,
-                price: item.price
-            });
-            document.dispatchEvent(new CustomEvent('productViewed', {
-                detail: { product: item.title }
-            }));
-        }
-        
-        showNotification(`Tazama: ${item.title}`, 'info');
-    }
-    
-    buyItem(itemId) {
-        if (!auth.currentUser) {
-            showNotification('Ingia kwanza ili kununua!', 'warning');
-            document.getElementById('loginModal').classList.add('show');
-            return;
-        }
-        
-        const item = this.items.find(i => i.id === itemId);
-        if (!item) return;
-        
-        showNotification(`Umeweka ${item.title} kwenye kikapu!`, 'success');
-        
-        if (window.analytics) {
-            window.analytics.trackUserAction('buy_click', {
-                product: item.title,
-                price: item.price,
-                seller: item.seller
-            });
-        }
-    }
 }
 
-// Initialize Marketplace
 const marketplaceManager = new MarketplaceManager();
 window.marketplaceManager = marketplaceManager;
