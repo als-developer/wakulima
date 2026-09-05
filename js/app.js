@@ -1,8 +1,7 @@
 // App Configuration
 const APP = {
     name: 'Kilimo Smart',
-    version: '1.0.0',
-    debug: true
+    version: '1.0.0'
 };
 
 // DOM Ready
@@ -10,99 +9,35 @@ document.addEventListener('DOMContentLoaded', () => {
     initApp();
     initNavigation();
     initModals();
-    loadPosts();
-    loadMarketplace();
-    loadEducation();
-    loadCommunity();
-    initWeather();
+    initDarkMode();
     initNotifications();
-    initAnalyticsTracking(); // ADDED
 });
 
-// Initialize App
 function initApp() {
     console.log(`${APP.name} v${APP.version} initialized`);
     
-    // Check for service worker
+    // Register Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js')
             .then(reg => console.log('SW registered'))
             .catch(err => console.log('SW registration failed:', err));
     }
     
-    // Check for online/offline
+    // Online/Offline
     window.addEventListener('online', () => {
-        showNotification('Mtandao umeunganishwa!', 'success');
-        if (window.analytics) {
-            window.analytics.trackEvent('Network', 'online');
-        }
+        showToast('Mtandao umeunganishwa!', 'success');
     });
     window.addEventListener('offline', () => {
-        showNotification('Huna mtandao! Baadhi ya vipengele havitafanya kazi.', 'error');
-        if (window.analytics) {
-            window.analytics.trackEvent('Network', 'offline');
-        }
+        showToast('Huna mtandao! Baadhi ya vipengele havitafanya kazi.', 'error');
     });
 }
 
-// ADDED: Analytics Tracking
-function initAnalyticsTracking() {
-    // Track page navigation
-    document.querySelectorAll('.nav-link, .bottom-nav-item').forEach(link => {
-        link.addEventListener('click', () => {
-            const page = link.dataset.page;
-            if (window.analytics) {
-                window.analytics.trackPageView(page);
-            }
-        });
-    });
-    
-    // Track post creation
-    document.addEventListener('postCreated', (e) => {
-        if (window.analytics) {
-            window.analytics.trackUserAction('post_created', {
-                content_length: e.detail?.content?.length || 0
-            });
-        }
-    });
-    
-    // Track product clicks
-    document.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-primary');
-        if (btn && btn.textContent.includes('Nunua')) {
-            if (window.analytics) {
-                window.analytics.trackEvent('Marketplace', 'buy_click');
-            }
-        }
-    });
-    
-    // Track auth events
-    document.addEventListener('userLogin', (e) => {
-        if (window.analytics) {
-            window.analytics.trackUserAction('login', {
-                username: e.detail?.username
-            });
-        }
-    });
-    
-    document.addEventListener('userRegister', (e) => {
-        if (window.analytics) {
-            window.analytics.trackUserAction('register', {
-                username: e.detail?.username,
-                account_type: e.detail?.accountType
-            });
-        }
-    });
-}
-
-// Navigation
 function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link, .bottom-nav-item');
+    const navLinks = document.querySelectorAll('.nav-link, .bottom-item');
     const pages = {
         home: 'homePage',
         marketplace: 'marketplacePage',
         education: 'educationPage',
-        community: 'communityPage',
         profile: 'profilePage'
     };
     
@@ -111,132 +46,114 @@ function initNavigation() {
             e.preventDefault();
             const page = link.dataset.page;
             
-            // Update active states
-            document.querySelectorAll('.nav-link, .bottom-nav-item').forEach(el => {
-                el.classList.remove('active');
-            });
+            navLinks.forEach(l => l.classList.remove('active'));
             link.classList.add('active');
             
-            // Show page
             Object.keys(pages).forEach(key => {
-                const pageEl = document.getElementById(pages[key]);
-                pageEl.classList.toggle('active', key === page);
+                const el = document.getElementById(pages[key]);
+                if (key === page) {
+                    el.classList.add('active');
+                    el.style.display = 'block';
+                } else {
+                    el.classList.remove('active');
+                    el.style.display = 'none';
+                }
             });
             
-            // Update URL
-            history.pushState({ page }, '', `?page=${page}`);
-            
-            // Track page view
-            if (window.analytics) {
-                window.analytics.trackPageView(page);
-            }
+            // Sync bottom nav
+            document.querySelectorAll('.bottom-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.page === page);
+            });
+        });
+    });
+}
+
+function initModals() {
+    function openModal(id) {
+        document.getElementById(id).classList.add('show');
+    }
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('show');
+    }
+    
+    document.getElementById('loginBtn').addEventListener('click', () => openModal('loginModal'));
+    document.getElementById('postBtn').addEventListener('click', () => openModal('postModal'));
+    
+    document.querySelectorAll('.close, .close-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+            this.closest('.modal').classList.remove('show');
         });
     });
     
-    // Handle back button
-    window.addEventListener('popstate', (e) => {
-        if (e.state && e.state.page) {
-            navigateTo(e.state.page);
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('show');
+            }
+        });
+    });
+}
+
+function initDarkMode() {
+    let darkMode = false;
+    document.getElementById('darkToggle').addEventListener('click', function() {
+        darkMode = !darkMode;
+        document.body.style.background = darkMode ? '#0a0a0a' : 'radial-gradient(ellipse at top, #0d4a0d, #061f06)';
+        this.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    });
+}
+
+function initNotifications() {
+    let notifCount = 3;
+    document.getElementById('notifBtn').addEventListener('click', function() {
+        const badge = this.querySelector('.badge');
+        if (notifCount > 0) {
+            notifCount = 0;
+            badge.style.display = 'none';
+            showToast('Arifa zote zimesomwa!', 'success');
+        } else {
+            showToast('Hakuna arifa mpya', 'info');
         }
     });
 }
 
-function navigateTo(page) {
-    const link = document.querySelector(`[data-page="${page}"]`);
-    if (link) link.click();
-}
-
-// Modals
-function initModals() {
-    const modals = document.querySelectorAll('.modal');
-    const closeBtns = document.querySelectorAll('.close-modal');
-    
-    closeBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.closest('.modal').classList.remove('show');
-            if (window.analytics) {
-                window.analytics.trackEvent('Modal', 'close');
-            }
-        });
-    });
-    
-    // Click outside to close
-    modals.forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('show');
-                if (window.analytics) {
-                    window.analytics.trackEvent('Modal', 'close_outside');
-                }
-            }
-        });
-    });
-    
-    // Login/Register toggle
-    const switchLink = document.getElementById('switchToRegister');
-    if (switchLink) {
-        switchLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const form = document.getElementById('authForm');
-            const btn = form.querySelector('button[type="submit"]');
-            const title = form.closest('.modal-content').querySelector('h3');
-            
-            if (btn.textContent === 'Ingia') {
-                btn.textContent = 'Jisajili';
-                title.textContent = 'Jisajili Sasa';
-                switchLink.textContent = 'Una akaunti? Ingia';
-                document.getElementById('accountType').style.display = 'block';
-                if (window.analytics) {
-                    window.analytics.trackEvent('Auth', 'switch_to_register');
-                }
-            } else {
-                btn.textContent = 'Ingia';
-                title.textContent = 'Ingia au Jisajili';
-                switchLink.textContent = 'Huna akaunti? Jisajili';
-                document.getElementById('accountType').style.display = 'block';
-                if (window.analytics) {
-                    window.analytics.trackEvent('Auth', 'switch_to_login');
-                }
-            }
-        });
-    }
-}
-
-// Show notification
-function showNotification(message, type = 'info') {
+// Toast Notification
+function showToast(message, type = 'info') {
     const colors = {
-        info: '#2196F3',
-        success: '#4CAF50',
-        error: '#f44336',
-        warning: '#FF9800'
+        success: '#7dce82',
+        info: '#d4af37',
+        error: '#ff4444'
     };
     
-    const notification = document.createElement('div');
-    notification.className = 'notification-pop';
-    notification.style.borderColor = colors[type] || colors.info;
-    notification.innerHTML = `
-        <div style="display:flex;align-items:center;gap:10px;">
-            <span style="font-size:1.5rem;">
-                ${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}
-            </span>
-            <span>${message}</span>
-            <button onclick="this.parentElement.parentElement.remove()" 
-                    style="background:none;border:none;font-size:1.2rem;cursor:pointer;">✕</button>
-        </div>
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(13, 74, 13, 0.95);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px;
+        padding: 12px 24px;
+        color: white;
+        font-size: 0.85rem;
+        z-index: 3000;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        border-left: 4px solid ${colors[type] || colors.info};
+        max-width: 90%;
+        text-align: center;
+        animation: fadeUp 0.3s ease;
     `;
-    document.body.appendChild(notification);
-    
-    // Track notification
-    if (window.analytics) {
-        window.analytics.trackEvent('Notification', type, message.substring(0, 50));
-    }
+    toast.textContent = message;
+    document.body.appendChild(toast);
     
     setTimeout(() => {
-        notification.remove();
-    }, 5000);
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.5s';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
 }
 
-// Export for other modules
+window.showToast = showToast;
 window.APP = APP;
-window.showNotification = showNotification;
-window.navigateTo = navigateTo;
