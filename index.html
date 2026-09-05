@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a5c1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Kilimo Smart - Jukwaa la Wakulima</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-mode.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="images/logo.png" alt="Kilimo Smart" height="40">
+                <span class="logo-text">Kilimo<span class="gold">Smart</span></span>
+            </div>
+            <div class="nav-menu">
+                <a href="#" class="nav-link active" data-page="home">
+                    <i class="icon-home"></i> Nyumbani
+                </a>
+                <a href="#" class="nav-link" data-page="marketplace">
+                    <i class="icon-market"></i> Soko
+                </a>
+                <a href="#" class="nav-link" data-page="education">
+                    <i class="icon-education"></i> Elimu
+                </a>
+                <a href="#" class="nav-link" data-page="community">
+                    <i class="icon-community"></i> Jamii
+                </a>
+                <a href="#" class="nav-link" data-page="profile">
+                    <i class="icon-profile"></i> Wasifu
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button id="darkModeToggle" class="dark-toggle">🌙</button>
+                <button id="notifBtn" class="notif-btn">🔔 <span class="notif-badge">3</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Home Page -->
+        <section id="homePage" class="page active">
+            <div class="welcome-section">
+                <h1>Karibu Kilimo<span class="gold">Smart</span></h1>
+                <p>Jukwaa la kisasa la wakulima wa kidunia</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">12,458</div>
+                    <div class="stat-label">Wakulima</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3,247</div>
+                    <div class="stat-label">Bidhaa</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">892</div>
+                    <div class="stat-label">Mafunzo</div>
+                </div>
+            </div>
+
+            <!-- Feed Posts -->
+            <div class="feed-section">
+                <div class="create-post">
+                    <img src="images/default-avatar.png" alt="Avatar" class="avatar">
+                    <input type="text" placeholder="Andika chapisho lako..." id="postInput">
+                    <button id="postBtn" class="btn-primary">Chapisha</button>
+                </div>
+                <div id="postsContainer" class="posts-container">
+                    <!-- Posts rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketplace Page -->
+        <section id="marketplacePage" class="page">
+            <h2>Soko la Kilimo</h2>
+            <div class="marketplace-filters">
+                <select id="categoryFilter">
+                    <option value="all">Kategoria zote</option>
+                    <option value="mbolea">Mbolea</option>
+                    <option value="mbegu">Mbegu</option>
+                    <option value="vifaa">Vifaa vya kulimia</option>
+                    <option value="nafaka">Nafaka</option>
+                    <option value="dawa">Dawa za mimea</option>
+                </select>
+                <input type="text" placeholder="Tafuta bidhaa..." id="searchMarket">
+            </div>
+            <div id="marketplaceItems" class="marketplace-grid">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Education Page -->
+        <section id="educationPage" class="page">
+            <h2>Elimu ya Kilimo</h2>
+            <div class="edu-categories">
+                <button class="edu-cat active" data-cat="all">Zote</button>
+                <button class="edu-cat" data-cat="kilimo">Kilimo</button>
+                <button class="edu-cat" data-cat="ufugaji">Ufugaji</button>
+                <button class="edu-cat" data-cat="biashara">Biashara</button>
+                <button class="edu-cat" data-cat="teknolojia">Teknolojia</button>
+            </div>
+            <div id="educationContent" class="edu-grid">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Community Page -->
+        <section id="communityPage" class="page">
+            <h2>Jamii ya Wakulima</h2>
+            <div class="community-tabs">
+                <button class="comm-tab active" data-tab="groups">Vikundi</button>
+                <button class="comm-tab" data-tab="events">Matukio</button>
+                <button class="comm-tab" data-tab="discussions">Majadiliano</button>
+            </div>
+            <div id="communityContent">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- Profile Page -->
+        <section id="profilePage" class="page">
+            <div class="profile-header">
+                <div class="profile-cover"></div>
+                <div class="profile-info">
+                    <img src="images/default-avatar.png" alt="Profile" class="profile-avatar">
+                    <h2 id="profileName">Mkulima Smart</h2>
+                    <p id="profileBio">Mkulima wa kidunia 🌍</p>
+                    <div class="profile-stats">
+                        <span><strong>150</strong> Wanaofuata</span>
+                        <span><strong>230</strong> Wanafuata</span>
+                        <span><strong>45</strong> Chapisho</span>
+                    </div>
+                    <button class="btn-primary" id="editProfileBtn">Hariri Wasifu</button>
+                </div>
+            </div>
+            <div class="profile-tabs">
+                <button class="prof-tab active" data-tab="posts">Chapisho</button>
+                <button class="prof-tab" data-tab="products">Bidhaa</button>
+                <button class="prof-tab" data-tab="saved">Zilizohifadhiwa</button>
+            </div>
+            <div id="profileContent">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation for Mobile -->
+    <div class="bottom-nav">
+        <button class="bottom-nav-item active" data-page="home">
+            <span>🏠</span>
+            <span>Nyumbani</span>
+        </button>
+        <button class="bottom-nav-item" data-page="marketplace">
+            <span>🛒</span>
+            <span>Soko</span>
+        </button>
+        <button class="bottom-nav-item" data-page="education">
+            <span>📚</span>
+            <span>Elimu</span>
+        </button>
+        <button class="bottom-nav-item" data-page="community">
+            <span>👥</span>
+            <span>Jamii</span>
+        </button>
+        <button class="bottom-nav-item" data-page="profile">
+            <span>👤</span>
+            <span>Wasifu</span>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <div id="postModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Chapisha Chapisho</h3>
+            <textarea id="postTextarea" placeholder="Ni nini kipya?..."></textarea>
+            <div class="post-options">
+                <button class="btn-option">📷 Picha</button>
+                <button class="btn-option">🎥 Video</button>
+                <button class="btn-option">📍 Eneo</button>
+            </div>
+            <button id="submitPostBtn" class="btn-primary">Chapisha</button>
+        </div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Ingia au Jisajili</h3>
+            <form id="authForm">
+                <input type="text" placeholder="Jina la mtumiaji" id="username" required>
+                <input type="password" placeholder="Nenosiri" id="password" required>
+                <select id="accountType">
+                    <option value="individual">Binafsi</option>
+                    <option value="business">Biashara</option>
+                    <option value="brand">Brand</option>
+                </select>
+                <button type="submit" class="btn-primary">Ingia</button>
+                <p class="auth-switch">Huna akaunti? <a href="#" id="switchToRegister">Jisajili</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/posts.js"></script>
+    <script src="js/marketplace.js"></script>
+    <script src="js/education.js"></script>
+    <script src="js/weather.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/pwa.js"></script>
+</body>
+</html>
