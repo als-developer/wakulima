@@ -5,8 +5,8 @@
   "start_url": "/index.html",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#1a5c1a",
-  "theme_color": "#1a5c1a",
+  "background_color": "#0d4a0d",
+  "theme_color": "#0d4a0d",
   "categories": ["agriculture", "business", "education"],
   "icons": [
     {
@@ -29,8 +29,6 @@
       "type": "image/png"
     }
   ],
-  "related_applications": [],
-  "prefer_related_applications": false,
   "shortcuts": [
     {
       "name": "Soko",
