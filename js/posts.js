@@ -99,6 +99,17 @@ class PostManager {
         localStorage.setItem('kilimo_user', JSON.stringify(auth.currentUser));
         
         showNotification('Chapisho limechapishwa!', 'success');
+        
+        // Track post creation
+        if (window.analytics) {
+            window.analytics.trackUserAction('post_created', {
+                content_length: text.length,
+                author: auth.currentUser.username
+            });
+            document.dispatchEvent(new CustomEvent('postCreated', {
+                detail: { content: text }
+            }));
+        }
     }
     
     toggleLike(postId) {
@@ -115,6 +126,11 @@ class PostManager {
         post.likes += post.liked ? 1 : -1;
         this.savePosts();
         this.renderPosts();
+        
+        // Track like
+        if (window.analytics) {
+            window.analytics.trackEvent('Post', post.liked ? 'like' : 'unlike', postId);
+        }
     }
     
     renderPosts() {
@@ -133,7 +149,7 @@ class PostManager {
         }
         
         container.innerHTML = this.posts.map(post => `
-            <div class="post-card">
+            <div class="post-card" data-track="post-view">
                 <div class="post-header">
                     <img src="${post.authorAvatar}" alt="${post.author}" class="avatar">
                     <div>
@@ -144,16 +160,16 @@ class PostManager {
                 <div class="post-content">${this.formatContent(post.content)}</div>
                 <div class="post-actions">
                     <button onclick="window.postManager.toggleLike('${post.id}')" 
-                            class="${post.liked ? 'liked' : ''}">
+                            class="${post.liked ? 'liked' : ''}" data-track="post-like">
                         ${post.liked ? '❤️' : '🤍'} ${post.likes}
                     </button>
-                    <button onclick="window.showNotification('Maoni yanaandaliwa...', 'info')">
+                    <button onclick="window.showNotification('Maoni yanaandaliwa...', 'info')" data-track="post-comment">
                         💬 ${post.comments}
                     </button>
-                    <button onclick="window.showNotification('Imehifadhiwa!', 'success')">
+                    <button onclick="window.showNotification('Imehifadhiwa!', 'success')" data-track="post-save">
                         🔖
                     </button>
-                    <button onclick="window.sharePost('${post.id}')">
+                    <button onclick="window.sharePost('${post.id}')" data-track="post-share">
                         📤
                     </button>
                 </div>
@@ -195,10 +211,21 @@ window.sharePost = function(postId) {
             title: 'Kilimo Smart',
             text: 'Angalia chapisho hili kwenye Kilimo Smart!',
             url: window.location.href
+        }).then(() => {
+            if (window.analytics) {
+                window.analytics.trackEvent('Post', 'share_success', postId);
+            }
+        }).catch(() => {
+            if (window.analytics) {
+                window.analytics.trackEvent('Post', 'share_cancel', postId);
+            }
         });
     } else {
         navigator.clipboard.writeText(window.location.href).then(() => {
             showNotification('Kiungo kimenakiliwa!', 'success');
+            if (window.analytics) {
+                window.analytics.trackEvent('Post', 'share_clipboard', postId);
+            }
         });
     }
 };
